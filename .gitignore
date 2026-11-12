@@ -1,0 +1,12 @@
+# 依赖（不提交）
+node_modules/
+
+# 日志 / 临时文件 / 系统垃圾
+*.log
+*.tmp
+*.bak
+*.orig
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

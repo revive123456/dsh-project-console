@@ -1,0 +1,66 @@
+{
+  "name": "dsh-project-console",
+  "version": "0.2.7",
+  "description": "DeepSeek Harness 的多需求工作台：每条需求一个隔离 worktree 和一个 agent 会话，自动验收、集成，人工确认后再推进主干。A multi-task workbench for DeepSeek Harness: isolated worktrees, agent sessions, evidence-backed acceptance, and human-confirmed integration.",
+  "engines": {
+    "node": "^22.19 || >=24"
+  },
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": {
+      "default": "./src/index.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "lib",
+    "cordis.patch.yml"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-theme",
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-api-remotes"
+      ],
+      "platform": "web",
+      "immediately": true
+    }
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "build:host": "node build-host.mjs",
+    "prepare": "node build.mjs && node build-host.mjs",
+    "test": "node build.mjs && node build-host.mjs && node probe/context.mjs && node probe/guardrails.mjs && node probe/delete-project.mjs && node probe/client-smoke.mjs"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "plugin",
+    "worktree",
+    "agent",
+    "task-workbench",
+    "project-console"
+  ],
+  "author": "revive123456",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/revive123456/dsh-project-console.git"
+  },
+  "homepage": "https://github.com/revive123456/dsh-project-console#readme",
+  "bugs": {
+    "url": "https://github.com/revive123456/dsh-project-console/issues"
+  }
+}
