@@ -72,7 +72,7 @@ const fakeCore = {
     lead: { sessionId: null, lastPromptAt: new Date(Date.now() - 3600_000).toISOString() },
     projects: [
       { id: "p1", name: "demo-repo" },
-      { id: "p2", name: "rack-visualization" },
+      { id: "p2", name: "demo-app" },
     ],
     tasks: [
       { id: 3, projectId: "p1", status: "verifying", title: "a", size: "s", branch: "feature/3-a", updatedAt: now },

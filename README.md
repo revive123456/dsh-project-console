@@ -10,7 +10,7 @@
 ![DSH 0.2.1+](https://img.shields.io/badge/DSH-0.2.1%2B-blueviolet)
 [![GitHub stars](https://img.shields.io/github/stars/revive123456/dsh-project-console?style=flat)](https://github.com/revive123456/dsh-project-console/stargazers)
 
-English | [中文](https://github.com/revive123456/dsh-project-console/blob/main/README.zh.md)
+English | [中文](https://github.com/revive123456/dsh-project-console/blob/main/docs/README.zh.md)
 
 ## What it is
 
