@@ -19,7 +19,9 @@
   "files": [
     "src",
     "lib",
-    "cordis.patch.yml"
+    "cordis.patch.yml",
+    "README.md",
+    "README.zh.md"
   ],
   "dsh": {
     "bundle": {
@@ -47,6 +49,7 @@
   "keywords": [
     "deepseek-harness",
     "dsh",
+    "dsh-plugin",
     "plugin",
     "worktree",
     "agent",
