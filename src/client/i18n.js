@@ -444,6 +444,11 @@ const PC_EN_PATTERNS = [
   [/^判定：(.+)$/, (m) => `Verdict: ${pcT(m[1])}`],
   [/^已推送到 (.+)$/, "Pushed to $1"],
   [/^合并 (.+)$/, "Merged $1"],
+  [/^全局槽位 (\d+)\/(\d+)$/, "Global slots $1/$2"],
+  [/^当前占用 (\d+) \/ (\d+)$/, "Currently used $1 / $2"],
+  [/^占用 (\d+)$/, "Used $1"],
+  [/^(低|中|高)工作量$/, (m) => `${pcT(m[1])} workload`],
+  [/^(待办|进行中|验收中|已归档)列$/, (m) => `${pcT(m[1])} column`],
 ];
 
 let pcLocale = null;
@@ -523,8 +528,21 @@ function pcElement(type, props, ...children) {
   return React.createElement(type, nextProps, ...pcMapChildren(children));
 }
 
+function pcUnescapeText(value) {
+  return typeof value === "string"
+    ? value.replace(/\\n/g, "\n").replace(/\\t/g, "\t")
+    : value;
+}
+
+function pcNormalizeDictionary(dict) {
+  const out = {};
+  for (const [key, value] of Object.entries(dict)) out[pcUnescapeText(key)] = pcUnescapeText(value);
+  return out;
+}
+
 function pcDictionaries() {
+  const en = pcNormalizeDictionary(PC_EN);
   const zh = {};
-  for (const key of Object.keys(PC_EN)) zh[key] = key;
-  return { zh, en: PC_EN };
+  for (const key of Object.keys(en)) zh[key] = key;
+  return { zh, en };
 }
