@@ -19,6 +19,7 @@ const manifest = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
 
 /** 拼接顺序（后者可用前者的顶层声明）。 */
 const CLIENT_FILES = [
+  "i18n.js",
   "util.js",
   "api.js",
   "css.js",

@@ -1,6 +1,6 @@
 {
   "name": "dsh-project-console",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "DeepSeek Harness 的多需求工作台：每条需求一个隔离 worktree 和一个 agent 会话，自动验收、集成，人工确认后再推进主干。A multi-task workbench for DeepSeek Harness: isolated worktrees, agent sessions, evidence-backed acceptance, and human-confirmed integration.",
   "engines": {
     "node": "^22.19 || >=24"

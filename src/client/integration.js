@@ -9,44 +9,44 @@
 /** 集成命令表格（命令 / 退出码 / 输出尾部）。 */
 function PcIntegrationCommands(props) {
   const commands = Array.isArray(props.commands) ? props.commands : [];
-  if (commands.length === 0) return React.createElement("div", { className: "pc-hint" }, "没有集成命令记录");
-  return React.createElement(
+  if (commands.length === 0) return pcElement("div", { className: "pc-hint" }, "没有集成命令记录");
+  return pcElement(
     "table",
     { className: "pc-table" },
-    React.createElement(
+    pcElement(
       "thead",
       null,
-      React.createElement(
+      pcElement(
         "tr",
         null,
-        React.createElement("th", { style: { width: "42%" } }, "命令"),
-        React.createElement("th", { style: { width: 52 } }, "退出码"),
-        React.createElement("th", null, "输出尾部"),
+        pcElement("th", { style: { width: "42%" } }, "命令"),
+        pcElement("th", { style: { width: 52 } }, "退出码"),
+        pcElement("th", null, "输出尾部"),
       ),
     ),
-    React.createElement(
+    pcElement(
       "tbody",
       null,
       commands.map((command, index) =>
-        React.createElement(
+        pcElement(
           "tr",
           { key: `${command.command || "cmd"}-${index}` },
-          React.createElement("td", { className: "pc-table-command" }, command.command || "—"),
-          React.createElement(
+          pcElement("td", { className: "pc-table-command" }, command.command || "—"),
+          pcElement(
             "td",
             null,
-            React.createElement(
+            pcElement(
               PcBadge,
               { tone: command.ok === false || command.exitCode !== 0 ? "danger" : "success" },
               String(command.exitCode ?? "?"),
             ),
           ),
-          React.createElement(
+          pcElement(
             "td",
             null,
             command.tail
-              ? React.createElement(PcDetails, { summary: "展开输出尾部" }, React.createElement("pre", { className: "pc-tail" }, String(command.tail)))
-              : React.createElement("span", { className: "pc-hint" }, "—"),
+              ? pcElement(PcDetails, { summary: "展开输出尾部" }, pcElement("pre", { className: "pc-tail" }, String(command.tail)))
+              : pcElement("span", { className: "pc-hint" }, "—"),
           ),
         ),
       ),
@@ -129,55 +129,55 @@ function PcBatchCard(props) {
     }
   };
 
-  return React.createElement(
+  return pcElement(
     "div",
     { className: "pc-batch" },
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-batch-head" },
-      React.createElement("span", { className: "pc-batch-id" }, batch.id),
-      React.createElement(PcBadge, { tone: meta.tone }, statusLabel),
-      React.createElement("span", { className: "pc-batch-title" }, `集成 ${taskIds.length} 个任务`),
-      React.createElement("span", { className: "pc-batch-meta", style: { marginLeft: "auto" } }, pcFmtRelative(batch.createdAt, props.now)),
-      React.createElement(
+      pcElement("span", { className: "pc-batch-id" }, batch.id),
+      pcElement(PcBadge, { tone: meta.tone }, statusLabel),
+      pcElement("span", { className: "pc-batch-title" }, `集成 ${taskIds.length} 个任务`),
+      pcElement("span", { className: "pc-batch-meta", style: { marginLeft: "auto" } }, pcFmtRelative(batch.createdAt, props.now)),
+      pcElement(
         PcButton,
         { variant: "ghost", size: "sm", icon: open ? "chevronDown" : "list", onClick: () => setOpen(!open) },
         open ? "收起报告" : "展开报告",
       ),
     ),
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-batch-meta" },
-      project ? React.createElement("span", null, project.name) : null,
-      React.createElement("span", null, "任务：", taskIds.map((id) => `#${id}`).join(" ")),
-      effective.testBranch ? React.createElement("span", { className: "pc-mono" }, `测试分支 ${effective.testBranch}`) : null,
-      effective.baseShaBefore ? React.createElement("span", { className: "pc-mono" }, `base ${String(effective.baseShaBefore).slice(0, 8)}`) : null,
-      effective.mergedSha ? React.createElement("span", { className: "pc-mono" }, `合并 ${String(effective.mergedSha).slice(0, 8)}`) : null,
-      effective.backupRef ? React.createElement("span", { className: "pc-mono" }, `备份 ${effective.backupRef}`) : null,
-      verdictText ? React.createElement(PcBadge, { tone: batch.status === "failed" ? "danger" : "success" }, `判定：${verdictText}`) : null,
+      project ? pcElement("span", null, project.name) : null,
+      pcElement("span", null, "任务：", taskIds.map((id) => `#${id}`).join(" ")),
+      effective.testBranch ? pcElement("span", { className: "pc-mono" }, `测试分支 ${effective.testBranch}`) : null,
+      effective.baseShaBefore ? pcElement("span", { className: "pc-mono" }, `base ${String(effective.baseShaBefore).slice(0, 8)}`) : null,
+      effective.mergedSha ? pcElement("span", { className: "pc-mono" }, `合并 ${String(effective.mergedSha).slice(0, 8)}`) : null,
+      effective.backupRef ? pcElement("span", { className: "pc-mono" }, `备份 ${effective.backupRef}`) : null,
+      verdictText ? pcElement(PcBadge, { tone: batch.status === "failed" ? "danger" : "success" }, `判定：${verdictText}`) : null,
     ),
     running
-      ? React.createElement(
+      ? pcElement(
           "div",
           { className: "pc-banner pc-banner--busy" },
-          React.createElement(PcSpinner, { size: 12 }),
-          React.createElement("span", null, "集成测试运行中，不要关闭页面（可能 1-10 分钟）"),
+          pcElement(PcSpinner, { size: 12 }),
+          pcElement("span", null, "集成测试运行中，不要关闭页面（可能 1-10 分钟）"),
         )
       : null,
     open
-      ? React.createElement(
+      ? pcElement(
           "div",
           { className: "pc-stack" },
           reportError
-            ? React.createElement("div", { className: "pc-error-box" }, `批次报告读取失败：${reportError.message}（以下为看板快照）`)
+            ? pcElement("div", { className: "pc-error-box" }, `批次报告读取失败：${reportError.message}（以下为看板快照）`)
             : null,
-          React.createElement(PcIntegrationCommands, { commands: effective.commands }),
+          pcElement(PcIntegrationCommands, { commands: effective.commands }),
           Array.isArray(effective.failures) && effective.failures.length > 0
-            ? React.createElement(
+            ? pcElement(
                 "div",
                 { className: "pc-banner pc-banner--err" },
-                React.createElement(PcIcon, { name: "alert", size: 12 }),
-                React.createElement(
+                pcElement(PcIcon, { name: "alert", size: 12 }),
+                pcElement(
                   "span",
                   null,
                   `失败项：${effective.failures
@@ -187,7 +187,7 @@ function PcBatchCard(props) {
               )
             : null,
           Array.isArray(effective.perTask) && effective.perTask.length > 0
-            ? React.createElement(
+            ? pcElement(
                 "div",
                 { className: "pc-hint" },
                 `逐任务结果：${effective.perTask
@@ -196,43 +196,43 @@ function PcBatchCard(props) {
               )
             : null,
           bisectText
-            ? React.createElement("div", { className: "pc-banner pc-banner--warn" }, React.createElement(PcIcon, { name: "alert", size: 12 }), React.createElement("span", null, `二分定位：${bisectText}`))
+            ? pcElement("div", { className: "pc-banner pc-banner--warn" }, pcElement(PcIcon, { name: "alert", size: 12 }), pcElement("span", null, `二分定位：${bisectText}`))
             : null,
           effective.workingTree
-            ? React.createElement("div", { className: "pc-hint" }, `工作区：${effective.workingTree}`)
+            ? pcElement("div", { className: "pc-hint" }, `工作区：${effective.workingTree}`)
             : null,
         )
       : null,
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-batch-actions" },
       canFf
-        ? React.createElement(
+        ? pcElement(
             PcButton,
             { variant: "primary", size: "sm", icon: "fastForward", disabled: running, onClick: () => setStep(step === "ff" ? null : "ff"), title: "把批次测试结果推送到本地 main 分支（不推远端仓库）" },
             "推送到 main",
           )
         : null,
       canRevert
-        ? React.createElement(
+        ? pcElement(
             PcButton,
             { variant: "danger", size: "sm", icon: "rotateCcw", disabled: running, onClick: () => setStep(step === "revert" ? null : "revert") },
             "回滚",
           )
         : null,
       batch.status === "failed"
-        ? React.createElement("span", { className: "pc-hint" }, "集成测试未通过，修复后重新发起集成")
+        ? pcElement("span", { className: "pc-hint" }, "集成测试未通过，修复后重新发起集成")
         : null,
     ),
     step === "ff"
-      ? React.createElement(
+      ? pcElement(
           "div",
           { className: "pc-confirm" },
-          React.createElement(
+          pcElement(
             "div",
             { className: "pc-confirm-text" },
-            React.createElement("strong", { style: { fontSize: 12 } }, "确认推送到 main？"),
-            React.createElement(
+            pcElement("strong", { style: { fontSize: 12 } }, "确认推送到 main？"),
+            pcElement(
               "span",
               null,
               "将把批次测试结果",
@@ -241,19 +241,19 @@ function PcBatchCard(props) {
               project ? `「${project.name}」的 ${project.integrationBranch || project.baseBranch || "main"}` : "main",
               " 分支。",
             ),
-            React.createElement(
+            pcElement(
               "span",
               null,
               "只更新本地 main，不会推送到远端仓库；宿主在改动前已把原分支备份到 ",
-              effective.backupRef ? React.createElement("span", { className: "pc-ref" }, effective.backupRef) : "备份 ref",
+              effective.backupRef ? pcElement("span", { className: "pc-ref" }, effective.backupRef) : "备份 ref",
               "，出问题可用「回滚」恢复。",
             ),
           ),
-          React.createElement(
+          pcElement(
             "div",
             { className: "pc-confirm-actions" },
-            React.createElement(PcButton, { variant: "ghost", size: "sm", onClick: () => setStep(null), disabled: busy }, "取消"),
-            React.createElement(
+            pcElement(PcButton, { variant: "ghost", size: "sm", onClick: () => setStep(null), disabled: busy }, "取消"),
+            pcElement(
               PcButton,
               { variant: "primary", size: "sm", icon: "fastForward", loading: busy, onClick: doFf, testId: "pc-btn-ff-confirm" },
               "确认推送",
@@ -262,26 +262,26 @@ function PcBatchCard(props) {
         )
       : null,
     step === "revert"
-      ? React.createElement(
+      ? pcElement(
           "div",
           { className: "pc-confirm" },
-          React.createElement(
+          pcElement(
             "div",
             { className: "pc-confirm-text" },
-            React.createElement("strong", { style: { fontSize: 12 } }, "确认回滚已合并批次？"),
-            React.createElement(
+            pcElement("strong", { style: { fontSize: 12 } }, "确认回滚已合并批次？"),
+            pcElement(
               "span",
               null,
               "将用备份 ",
-              effective.backupRef ? React.createElement("span", { className: "pc-ref" }, effective.backupRef) : "ref",
+              effective.backupRef ? pcElement("span", { className: "pc-ref" }, effective.backupRef) : "ref",
               " 或 revert commit 把 base 恢复到合并前状态；已合并的提交会从分支上移除。",
             ),
           ),
-          React.createElement(
+          pcElement(
             "div",
             { className: "pc-confirm-actions" },
-            React.createElement(PcButton, { variant: "ghost", size: "sm", onClick: () => setStep(null), disabled: busy }, "取消"),
-            React.createElement(
+            pcElement(PcButton, { variant: "ghost", size: "sm", onClick: () => setStep(null), disabled: busy }, "取消"),
+            pcElement(
               PcButton,
               { variant: "danger", size: "sm", icon: "rotateCcw", loading: busy, onClick: doRevert, testId: "pc-btn-revert-confirm" },
               "确认回滚",
@@ -369,41 +369,41 @@ function PcIntegrationDrawer(props) {
     }
   };
 
-  const header = React.createElement(
+  const header = pcElement(
     "div",
     { className: "pc-drawer-head" },
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-drawer-head-text" },
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-drawer-eyebrow" },
-        React.createElement(PcBadge, { tone: "busy", icon: "layers" }, "集成与合并"),
+        pcElement(PcBadge, { tone: "busy", icon: "layers" }, "集成与合并"),
       ),
-      React.createElement("div", { className: "pc-drawer-title" }, "在测试分支上集成，人工确认后推送到 main"),
-      React.createElement(
+      pcElement("div", { className: "pc-drawer-title" }, "在测试分支上集成，人工确认后推送到 main"),
+      pcElement(
         "div",
         { className: "pc-drawer-sub" },
-        React.createElement("span", null, "流程：勾选已验收任务 → 发起集成 → 跑集成命令 → 通过后推送到 main → 需要时回滚"),
+        pcElement("span", null, "流程：勾选已验收任务 → 发起集成 → 跑集成命令 → 通过后推送到 main → 需要时回滚"),
       ),
     ),
-    React.createElement(
+    pcElement(
       "button",
       { type: "button", className: "pc-icon-btn", onClick: props.onClose, title: "关闭", "aria-label": "关闭集成面板", disabled: integrating },
-      React.createElement(PcIcon, { name: "close", size: 15 }),
+      pcElement(PcIcon, { name: "close", size: 15 }),
     ),
   );
 
   const bodyChildren = [];
   bodyChildren.push(
-    React.createElement(
+    pcElement(
       "div",
       { key: "project", className: "pc-row", style: { justifyContent: "space-between" } },
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-row" },
-        React.createElement("span", { className: "pc-hint" }, "项目"),
-        React.createElement(
+        pcElement("span", { className: "pc-hint" }, "项目"),
+        pcElement(
           PcSelect,
           {
             value: projectId,
@@ -414,18 +414,18 @@ function PcIntegrationDrawer(props) {
             style: { width: 220, height: 28 },
             disabled: integrating,
           },
-          projects.length === 0 ? React.createElement("option", { value: "" }, "（没有项目）") : null,
-          projects.map((item) => React.createElement("option", { key: item.id, value: item.id }, item.name)),
+          projects.length === 0 ? pcElement("option", { value: "" }, "（没有项目）") : null,
+          projects.map((item) => pcElement("option", { key: item.id, value: item.id }, item.name)),
         ),
       ),
       project && project.integrationBranch
-        ? React.createElement("span", { className: "pc-hint pc-mono" }, `集成目标分支 ${project.integrationBranch}`)
+        ? pcElement("span", { className: "pc-hint pc-mono" }, `集成目标分支 ${project.integrationBranch}`)
         : null,
     ),
   );
   if (project && project.integrationTests && Array.isArray(project.integrationTests.commands) && project.integrationTests.commands.length > 0) {
     bodyChildren.push(
-      React.createElement(
+      pcElement(
         "div",
         { key: "cmds", className: "pc-hint pc-mono" },
         `集成命令：${project.integrationTests.commands.join(" · ")}`,
@@ -434,11 +434,11 @@ function PcIntegrationDrawer(props) {
   }
   if (integrating) {
     bodyChildren.push(
-      React.createElement(
+      pcElement(
         "div",
         { key: "busy", className: "pc-banner pc-banner--busy" },
-        React.createElement(PcSpinner, { size: 13 }),
-        React.createElement(
+        pcElement(PcSpinner, { size: 13 }),
+        pcElement(
           "span",
           null,
           `集成测试运行中，不要关闭页面（已等待 ${pcFmtDuration(elapsed)}；可能 1-10 分钟）`,
@@ -447,48 +447,48 @@ function PcIntegrationDrawer(props) {
     );
   }
   bodyChildren.push(
-    React.createElement(
+    pcElement(
       "div",
       { key: "select", className: "pc-section" },
-      React.createElement(PcSectionTitle, null, "可集成的已验收任务", `${accepted.length} 个`),
+      pcElement(PcSectionTitle, null, "可集成的已验收任务", `${accepted.length} 个`),
       accepted.length === 0
-        ? React.createElement(
+        ? pcElement(
             "div",
             { className: "pc-hint" },
             "当前项目没有「已验收」任务。先在验收中列点「验收」，任务才会进入可集成列表。",
           )
-        : React.createElement(
+        : pcElement(
             "div",
             { className: "pc-select-list" },
-            React.createElement(
+            pcElement(
               "label",
               { className: "pc-check-row", style: { fontWeight: 600 } },
-              React.createElement("input", {
+              pcElement("input", {
                 type: "checkbox",
                 className: "pc-check-input",
                 checked: selected.length === accepted.length && accepted.length > 0,
                 onChange: () => setSelected(selected.length === accepted.length ? [] : accepted.map((task) => task.id)),
                 disabled: integrating,
               }),
-              React.createElement("span", { className: "pc-check-row-title" }, selected.length === accepted.length ? "取消全选" : "全选"),
-              React.createElement("span", { className: "pc-hint" }, `已选 ${selected.length}/${accepted.length}`),
+              pcElement("span", { className: "pc-check-row-title" }, selected.length === accepted.length ? "取消全选" : "全选"),
+              pcElement("span", { className: "pc-hint" }, `已选 ${selected.length}/${accepted.length}`),
             ),
             accepted.map((task) =>
-              React.createElement(
+              pcElement(
                 "label",
                 { key: task.id, className: "pc-check-row" },
-                React.createElement("input", {
+                pcElement("input", {
                   type: "checkbox",
                   className: "pc-check-input",
                   checked: selected.includes(task.id),
                   onChange: () => toggleTask(task.id),
                   disabled: integrating,
                 }),
-                React.createElement("span", { className: "pc-card-id" }, `#${task.id}`),
-                React.createElement("span", { className: "pc-check-row-title" }, task.title || "（未命名任务）"),
-                task.size ? React.createElement(PcChip, { mono: true }, pcWorkloadChipText(task)) : null,
+                pcElement("span", { className: "pc-card-id" }, `#${task.id}`),
+                pcElement("span", { className: "pc-check-row-title" }, task.title || "（未命名任务）"),
+                task.size ? pcElement(PcChip, { mono: true }, pcWorkloadChipText(task)) : null,
                 task.acceptance && task.acceptance.acceptedAt
-                  ? React.createElement("span", { className: "pc-hint" }, pcFmtDateTime(task.acceptance.acceptedAt))
+                  ? pcElement("span", { className: "pc-hint" }, pcFmtDateTime(task.acceptance.acceptedAt))
                   : null,
               ),
             ),
@@ -496,11 +496,11 @@ function PcIntegrationDrawer(props) {
     ),
   );
   bodyChildren.push(
-    React.createElement(
+    pcElement(
       "div",
       { key: "run", className: "pc-integrate-bar" },
-      React.createElement("span", { className: "pc-hint" }, `将集成 ${selected.length} 个任务（未勾选时按宿主默认=全部已验收）`),
-      React.createElement(
+      pcElement("span", { className: "pc-hint" }, `将集成 ${selected.length} 个任务（未勾选时按宿主默认=全部已验收）`),
+      pcElement(
         PcButton,
         {
           variant: "primary",
@@ -516,14 +516,14 @@ function PcIntegrationDrawer(props) {
     ),
   );
   bodyChildren.push(
-    React.createElement(
+    pcElement(
       "div",
       { key: "batches", className: "pc-section" },
-      React.createElement(PcSectionTitle, null, "最近批次", batches.length > 0 ? `${batches.length} 个` : null),
+      pcElement(PcSectionTitle, null, "最近批次", batches.length > 0 ? `${batches.length} 个` : null),
       batches.length === 0
-        ? React.createElement("div", { className: "pc-hint" }, "还没有集成批次。勾选已验收任务后点「发起集成」。")
+        ? pcElement("div", { className: "pc-hint" }, "还没有集成批次。勾选已验收任务后点「发起集成」。")
         : batches.map((batch) =>
-            React.createElement(PcBatchCard, {
+            pcElement(PcBatchCard, {
               key: batch.id,
               batch,
               projects,
@@ -536,7 +536,7 @@ function PcIntegrationDrawer(props) {
     ),
   );
 
-  return React.createElement(
+  return pcElement(
     "div",
     {
       className: "pc-drawer-mask",
@@ -544,11 +544,11 @@ function PcIntegrationDrawer(props) {
         if (event.target === event.currentTarget && !integrating) props.onClose();
       },
     },
-    React.createElement(
+    pcElement(
       "aside",
       { className: "pc-drawer pc-drawer--wide", "data-testid": "pc-integration", role: "dialog", "aria-label": "集成与合并", "aria-modal": "true" },
       header,
-      React.createElement("div", { className: "pc-drawer-body" }, bodyChildren),
+      pcElement("div", { className: "pc-drawer-body" }, bodyChildren),
     ),
   );
 }

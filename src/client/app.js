@@ -20,30 +20,30 @@ function PcTopBar(props) {
     connLabel = "连接中断，正在重试…";
   }
   const connDot = props.conn === "online" ? "online" : props.conn === "offline" ? "offline" : "idle";
-  return React.createElement(
+  return pcElement(
     "header",
     { className: "pc-topbar" },
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-brand" },
-      React.createElement("div", { className: "pc-brand-icon" }, React.createElement(PcIcon, { name: "board", size: 16 })),
-      React.createElement(
+      pcElement("div", { className: "pc-brand-icon" }, pcElement(PcIcon, { name: "board", size: 16 })),
+      pcElement(
         "div",
         { className: "pc-brand-text" },
-        React.createElement("span", { className: "pc-brand-title" }, "工程台"),
-        React.createElement(
+        pcElement("span", { className: "pc-brand-title" }, "工程台"),
+        pcElement(
           "span",
           { className: "pc-brand-sub" },
-          React.createElement(PcDot, { tone: connDot, title: connLabel }),
+          pcElement(PcDot, { tone: connDot, title: connLabel }),
           connLabel,
         ),
       ),
     ),
-    React.createElement("div", { className: "pc-topbar-spacer" }),
-    React.createElement(
+    pcElement("div", { className: "pc-topbar-spacer" }),
+    pcElement(
       "div",
       { className: "pc-topbar-actions" },
-      React.createElement(
+      pcElement(
         PcSelect,
         {
           className: "pc-project-select",
@@ -53,16 +53,16 @@ function PcTopBar(props) {
           onChange: props.onSelectProject,
           title: "按项目筛选看板",
         },
-        React.createElement("option", { value: "" }, "全部项目"),
+        pcElement("option", { value: "" }, "全部项目"),
         projects.map((project) =>
-          React.createElement(
+          pcElement(
             "option",
             { key: project.id, value: project.id },
             `${project.name}${pcReviewCountOf(value, project.id) > 0 ? `（验收中 ${pcReviewCountOf(value, project.id)}）` : ""}`,
           ),
         ),
       ),
-      React.createElement(
+      pcElement(
         PcButton,
         {
           variant: "secondary",
@@ -75,20 +75,20 @@ function PcTopBar(props) {
         },
         "会话",
         props.sessionsCount > 0
-          ? React.createElement("span", { className: "pc-btn-count", "data-testid": "pc-btn-sessions-count" }, String(props.sessionsCount))
+          ? pcElement("span", { className: "pc-btn-count", "data-testid": "pc-btn-sessions-count" }, String(props.sessionsCount))
           : null,
       ),
-      React.createElement(
+      pcElement(
         PcButton,
         { variant: "ghost", size: "sm", icon: "folder", disabled: !ready, onClick: props.onOpenProjects, testId: "pc-btn-projects", title: "项目管理：添加项目、删除项目（连带任务记录）" },
         "项目",
       ),
-      React.createElement(
+      pcElement(
         PcButton,
         { variant: "primary", size: "sm", icon: "plus", disabled: !ready || projects.length === 0, onClick: props.onNewTask, testId: "pc-btn-new-task" },
         "新需求",
       ),
-      React.createElement(
+      pcElement(
         PcButton,
         {
           variant: "secondary",
@@ -100,7 +100,7 @@ function PcTopBar(props) {
         },
         acceptedCount > 0 ? `集成 ${acceptedCount}` : "集成",
       ),
-      React.createElement(
+      pcElement(
         PcButton,
         {
           variant: "secondary",
@@ -114,7 +114,7 @@ function PcTopBar(props) {
         },
         leadSessionId ? "和工程台聊" : "创建工程台会话",
       ),
-      React.createElement(
+      pcElement(
         PcButton,
         {
           variant: "secondary",
@@ -127,7 +127,7 @@ function PcTopBar(props) {
         },
         "设置",
       ),
-      React.createElement(
+      pcElement(
         "button",
         {
           type: "button",
@@ -138,7 +138,7 @@ function PcTopBar(props) {
           "aria-label": "刷新",
           "data-testid": "pc-btn-refresh",
         },
-        props.refreshing ? React.createElement(PcSpinner, { size: 14 }) : React.createElement(PcIcon, { name: "refresh", size: 15 }),
+        props.refreshing ? pcElement(PcSpinner, { size: 14 }) : pcElement(PcIcon, { name: "refresh", size: 15 }),
       ),
     ),
   );
@@ -176,46 +176,46 @@ function PcAddProjectForm(props) {
       setBusy(false);
     }
   };
-  const fields = React.createElement(
+  const fields = pcElement(
     React.Fragment,
     null,
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-form-grid pc-form-grid--2" },
-      React.createElement(
+      pcElement(
         PcField,
         { label: "项目名称", required: true },
-        React.createElement(PcInput, { value: name, onChange: setName, placeholder: "例如 my-project", testId: "pc-input-project-name" }),
+        pcElement(PcInput, { value: name, onChange: setName, placeholder: "例如 my-project", testId: "pc-input-project-name" }),
       ),
-      React.createElement(
+      pcElement(
         PcField,
         { label: "仓库绝对路径", required: true, hint: "必须是本机已存在的 Git 仓库" },
-        React.createElement(PcInput, { value: repoPath, onChange: setRepoPath, placeholder: "例如 /path/to/your-repo", testId: "pc-input-project-repo" }),
+        pcElement(PcInput, { value: repoPath, onChange: setRepoPath, placeholder: "例如 /path/to/your-repo", testId: "pc-input-project-repo" }),
       ),
     ),
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-form-grid pc-form-grid--2" },
-      React.createElement(
+      pcElement(
         PcField,
         { label: "主干分支", hint: "集成完成后推送到这个分支（一般填 main）" },
-        React.createElement(PcInput, { value: baseBranch, onChange: setBaseBranch, placeholder: "main" }),
+        pcElement(PcInput, { value: baseBranch, onChange: setBaseBranch, placeholder: "main" }),
       ),
-      React.createElement(
+      pcElement(
         PcField,
         { label: "任务会话权限", hint: "workspace-write 只能写 worktree；全权限适合依赖 home 缓存的视觉任务" },
-        React.createElement(
+        pcElement(
           PcSelect,
           { value: workerFilePolicy, onChange: setWorkerFilePolicy, testId: "pc-select-project-worker-policy" },
-          React.createElement("option", { value: "workspace-write" }, "只写 worktree（workspace-write，推荐）"),
-          React.createElement("option", { value: "danger-full-access" }, "宿主全权限（danger-full-access，信任模式）"),
+          pcElement("option", { value: "workspace-write" }, "只写 worktree（workspace-write，推荐）"),
+          pcElement("option", { value: "danger-full-access" }, "宿主全权限（danger-full-access，信任模式）"),
         ),
       ),
     ),
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-empty-actions" },
-      React.createElement(
+      pcElement(
         PcButton,
         { variant: "primary", size: "md", icon: "plus", loading: busy, onClick: submit, testId: "pc-btn-add-project-submit" },
         "添加项目",
@@ -223,74 +223,74 @@ function PcAddProjectForm(props) {
     ),
   );
   if (props.plain) return fields;
-  return React.createElement("div", { className: "pc-empty-card" }, React.createElement("div", { className: "pc-empty-card-title" }, React.createElement(PcIcon, { name: "folder", size: 15 }), "添加项目"), fields);
+  return pcElement("div", { className: "pc-empty-card" }, pcElement("div", { className: "pc-empty-card-title" }, pcElement(PcIcon, { name: "folder", size: 15 }), "添加项目"), fields);
 }
 
 /** 项目管理弹窗：列出全部项目（看板已归档的也列）+ 删除入口 + 添加项目表单。 */
 function PcProjectsDialog(props) {
   const projects = Array.isArray(props.projects) ? props.projects : [];
-  return React.createElement(
+  return pcElement(
     PcModal,
     {
       title: "项目",
       subtitle: "工程台跟踪的仓库。删除项目会连它名下的任务记录一起删；仓库本身和已合并到主干分支的提交不动。",
       width: 720,
       onClose: props.onClose,
-      footer: React.createElement(PcButton, { variant: "ghost", size: "md", onClick: props.onClose }, "关闭"),
+      footer: pcElement(PcButton, { variant: "ghost", size: "md", onClick: props.onClose }, "关闭"),
     },
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-projects-section" },
-      React.createElement(PcSectionTitle, { icon: "folder", right: `${projects.length} 个` }, "已登记的项目"),
+      pcElement(PcSectionTitle, { icon: "folder", right: `${projects.length} 个` }, "已登记的项目"),
       projects.length === 0
-        ? React.createElement("div", { className: "pc-note" }, "还没有项目。用下面的表单添加一个，工程台才能建需求、派任务。")
-        : React.createElement(
+        ? pcElement("div", { className: "pc-note" }, "还没有项目。用下面的表单添加一个，工程台才能建需求、派任务。")
+        : pcElement(
             "div",
             { className: "pc-projects-list", "data-testid": "pc-projects-list" },
             projects.map((project) => {
               const counts = project.taskCounts || {};
               const archived = Boolean(project.archivedAt);
-              return React.createElement(
+              return pcElement(
                 "div",
                 { key: project.id, className: "pc-projects-row", "data-testid": `pc-project-row-${project.id}` },
-                React.createElement(
+                pcElement(
                   "div",
                   { className: "pc-projects-main" },
-                  React.createElement(
+                  pcElement(
                     "div",
                     { className: "pc-projects-name-row" },
-                    React.createElement("span", { className: "pc-projects-name", title: project.repoPath }, project.name || project.id),
-                    React.createElement(PcChip, { mono: true, title: "项目 id" }, project.id),
-                    archived ? React.createElement(PcBadge, { tone: "idle" }, "已归档") : null,
+                    pcElement("span", { className: "pc-projects-name", title: project.repoPath }, project.name || project.id),
+                    pcElement(PcChip, { mono: true, title: "项目 id" }, project.id),
+                    archived ? pcElement(PcBadge, { tone: "idle" }, "已归档") : null,
                   ),
-                  React.createElement("div", { className: "pc-projects-repo", title: project.repoPath }, project.repoPath || "（未设置仓库路径）"),
-                  React.createElement(
+                  pcElement("div", { className: "pc-projects-repo", title: project.repoPath }, project.repoPath || "（未设置仓库路径）"),
+                  pcElement(
                     "div",
                     { className: "pc-projects-meta" },
-                    React.createElement("span", null, `base ${project.baseBranch || "main"}`),
-                    React.createElement("span", null, `待办 ${pcNum(counts.todo, 0)}`),
-                    React.createElement("span", null, `进行中 ${pcNum(counts.running, 0)}`),
-                    React.createElement("span", null, `验收中 ${pcNum(counts.review, 0)}`),
-                    React.createElement("span", null, `已归档 ${pcNum(counts.done, 0)}`),
-                    React.createElement("span", null, `槽位 ${pcNum(project.usedSlots, 0)}/${pcNum(project.slotBudget, 6)}`),
+                    pcElement("span", null, `base ${project.baseBranch || "main"}`),
+                    pcElement("span", null, `待办 ${pcNum(counts.todo, 0)}`),
+                    pcElement("span", null, `进行中 ${pcNum(counts.running, 0)}`),
+                    pcElement("span", null, `验收中 ${pcNum(counts.review, 0)}`),
+                    pcElement("span", null, `已归档 ${pcNum(counts.done, 0)}`),
+                    pcElement("span", null, `槽位 ${pcNum(project.usedSlots, 0)}/${pcNum(project.slotBudget, 6)}`),
                   ),
                 ),
-                React.createElement(
+                pcElement(
                   "div",
                   { className: "pc-projects-policy" },
-                  React.createElement("span", { className: "pc-field-label" }, "任务权限"),
-                  React.createElement(
+                  pcElement("span", { className: "pc-field-label" }, "任务权限"),
+                  pcElement(
                     PcSelect,
                     {
                       value: project.workerFilePolicy || (project.autonomy === "unleashed" ? "danger-full-access" : "workspace-write"),
                       testId: `pc-select-project-policy-${project.id}`,
                       onChange: (value) => props.onPolicyChange && props.onPolicyChange(project, value),
                     },
-                    React.createElement("option", { value: "workspace-write" }, "workspace-write"),
-                    React.createElement("option", { value: "danger-full-access" }, "danger-full-access"),
+                    pcElement("option", { value: "workspace-write" }, "workspace-write"),
+                    pcElement("option", { value: "danger-full-access" }, "danger-full-access"),
                   ),
                 ),
-                React.createElement(
+                pcElement(
                   PcButton,
                   {
                     variant: "danger",
@@ -306,11 +306,11 @@ function PcProjectsDialog(props) {
             }),
           ),
     ),
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-projects-section" },
-      React.createElement(PcSectionTitle, { icon: "plus" }, "添加项目"),
-      React.createElement(PcAddProjectForm, {
+      pcElement(PcSectionTitle, { icon: "plus" }, "添加项目"),
+      pcElement(PcAddProjectForm, {
         plain: true,
         toast: props.toast,
         onCreated: () => {
@@ -343,30 +343,30 @@ function PcSettingsModelPicker(props) {
   let effortControl;
   if (catalogEmpty) {
     // 模型目录读不到（llm 服务/凭据不可用）时退化成手填，至少能配置。
-    modelControl = React.createElement(
+    modelControl = pcElement(
       "div",
       { className: "pc-settings-route" },
-      React.createElement(PcInput, {
+      pcElement(PcInput, {
         value: current.provider,
         placeholder: "provider，如 mtcode",
         disabled,
         onChange: (next) => onChange({ key: next ? `${next}::${current.model}` : "", effort: value.effort }),
       }),
-      React.createElement(PcInput, {
+      pcElement(PcInput, {
         value: current.model,
         placeholder: "model，如 deepseek-flash",
         disabled,
         onChange: (next) => onChange({ key: next ? `${current.provider}::${next}` : "", effort: value.effort }),
       }),
     );
-    effortControl = React.createElement(PcInput, {
+    effortControl = pcElement(PcInput, {
       value: currentEffort,
       placeholder: "思考强度，如 max（可空）",
       disabled,
       onChange: (next) => onChange({ key: value.key, effort: next }),
     });
   } else {
-    modelControl = React.createElement(
+    modelControl = pcElement(
       PcSelect,
       {
         value: value.key,
@@ -374,17 +374,17 @@ function PcSettingsModelPicker(props) {
         onChange: (next) => onChange({ key: next, effort: "" }),
         testId: `pc-settings-model-${testId}`,
       },
-      React.createElement("option", { value: "" }, "跟随项目 / 部署默认"),
-      value.key && !selected ? React.createElement("option", { value: value.key }, `当前：${value.key.replace("::", " / ")}`) : null,
+      pcElement("option", { value: "" }, "跟随项目 / 部署默认"),
+      value.key && !selected ? pcElement("option", { value: value.key }, `当前：${value.key.replace("::", " / ")}`) : null,
       catalogView.groups.map((group) =>
-        React.createElement(
+        pcElement(
           "optgroup",
           { key: group.id, label: group.name },
-          group.models.map((model) => React.createElement("option", { key: model.key, value: model.key }, model.name)),
+          group.models.map((model) => pcElement("option", { key: model.key, value: model.key }, model.name)),
         ),
       ),
     );
-    effortControl = React.createElement(
+    effortControl = pcElement(
       PcSelect,
       {
         value: currentEffort,
@@ -392,24 +392,24 @@ function PcSettingsModelPicker(props) {
         onChange: (next) => onChange({ key: value.key, effort: next }),
         testId: `pc-settings-effort-${testId}`,
       },
-      React.createElement("option", { value: "" }, "模型默认"),
-      currentEffort && !knownEffort ? React.createElement("option", { value: currentEffort }, `当前：${currentEffort}`) : null,
-      efforts.map((effort) => React.createElement("option", { key: effort.id, value: effort.id }, effort.name || effort.id)),
+      pcElement("option", { value: "" }, "模型默认"),
+      currentEffort && !knownEffort ? pcElement("option", { value: currentEffort }, `当前：${currentEffort}`) : null,
+      efforts.map((effort) => pcElement("option", { key: effort.id, value: effort.id }, effort.name || effort.id)),
     );
   }
-  return React.createElement(
+  return pcElement(
     "div",
     { className: "pc-settings-grid" },
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-settings-cell" },
-      React.createElement("span", { className: "pc-field-label" }, "模型"),
+      pcElement("span", { className: "pc-field-label" }, "模型"),
       modelControl,
     ),
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-settings-cell" },
-      React.createElement("span", { className: "pc-field-label" }, "思考强度"),
+      pcElement("span", { className: "pc-field-label" }, "思考强度"),
       effortControl,
     ),
   );
@@ -534,16 +534,16 @@ function PcSettingsDialog(props) {
   };
 
   const renderTier = ([tier, label]) =>
-    React.createElement(
+    pcElement(
       "div",
       { key: tier, className: "pc-settings-tier" },
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-settings-tier-head" },
-        React.createElement("span", { className: "pc-settings-tier-name" }, `${label}工作量`),
-        React.createElement("span", { className: "pc-settings-tier-sizes" }, `size ${PC_TIER_SIZE_HINT[tier] || ""}`),
+        pcElement("span", { className: "pc-settings-tier-name" }, `${label}工作量`),
+        pcElement("span", { className: "pc-settings-tier-sizes" }, `size ${PC_TIER_SIZE_HINT[tier] || ""}`),
       ),
-      React.createElement(PcSettingsModelPicker, {
+      pcElement(PcSettingsModelPicker, {
         value: draft.workload[tier],
         catalogView,
         catalogEmpty,
@@ -554,48 +554,48 @@ function PcSettingsDialog(props) {
     );
 
   const renderProjectSlot = (project) =>
-    React.createElement(
+    pcElement(
       "div",
       { key: project.id, className: "pc-settings-project" },
-      React.createElement("span", { className: "pc-settings-project-name", title: project.repoPath }, project.name || project.id),
-      React.createElement(PcInput, {
+      pcElement("span", { className: "pc-settings-project-name", title: project.repoPath }, project.name || project.id),
+      pcElement(PcInput, {
         type: "number",
         value: draft.projectSlots[project.id],
         disabled: saving,
         testId: `pc-settings-project-slot-${project.id}`,
         onChange: (value) => setProjectSlot(project.id, value),
       }),
-      React.createElement("span", { className: "pc-settings-project-used" }, `占用 ${pcNum(project.usedSlots, 0)}`),
+      pcElement("span", { className: "pc-settings-project-used" }, `占用 ${pcNum(project.usedSlots, 0)}`),
     );
 
-  return React.createElement(
+  return pcElement(
     PcModal,
     {
       title: "设置",
       subtitle: "工作台自己的模型、低/中/高工作量派发用的模型、以及同时能跑多少任务（并发槽位）。",
       width: 700,
       onClose: saving ? undefined : props.onClose,
-      footer: React.createElement(
+      footer: pcElement(
         React.Fragment,
         null,
-        React.createElement(PcButton, { variant: "ghost", size: "md", onClick: props.onClose, disabled: saving }, "取消"),
-        React.createElement(
+        pcElement(PcButton, { variant: "ghost", size: "md", onClick: props.onClose, disabled: saving }, "取消"),
+        pcElement(
           PcButton,
           { variant: "primary", size: "md", icon: "check", loading: saving, onClick: submit, testId: "pc-settings-save" },
           "保存配置",
         ),
       ),
     },
-    catalog.phase === "loading" ? React.createElement("div", { className: "pc-hint" }, "正在读取模型目录…") : null,
+    catalog.phase === "loading" ? pcElement("div", { className: "pc-hint" }, "正在读取模型目录…") : null,
     catalog.error
-      ? React.createElement("div", { className: "pc-note" }, `模型目录读取失败（${catalog.error}），模型改成手填 provider / model。`)
+      ? pcElement("div", { className: "pc-note" }, `模型目录读取失败（${catalog.error}），模型改成手填 provider / model。`)
       : null,
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-settings-section" },
-      React.createElement(PcSectionTitle, { icon: "robot" }, "工作台模型"),
-      React.createElement("div", { className: "pc-note" }, "工程台会话（和工程台聊的那位）和工作量判定都用它。留空 = 部署默认。"),
-      React.createElement(PcSettingsModelPicker, {
+      pcElement(PcSectionTitle, { icon: "robot" }, "工作台模型"),
+      pcElement("div", { className: "pc-note" }, "工程台会话（和工程台聊的那位）和工作量判定都用它。留空 = 部署默认。"),
+      pcElement(PcSettingsModelPicker, {
         value: draft.workbench,
         catalogView,
         catalogEmpty,
@@ -604,34 +604,34 @@ function PcSettingsDialog(props) {
         onChange: setWorkbench,
       }),
     ),
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-settings-section" },
-      React.createElement(PcSectionTitle, { icon: "zap" }, "工作量模型"),
-      React.createElement(
+      pcElement(PcSectionTitle, { icon: "zap" }, "工作量模型"),
+      pcElement(
         "div",
         { className: "pc-note" },
         "任务派发时按工作量档位选模型；留空 = 跟随项目 workerModel / 部署默认。",
       ),
       PC_WORKLOAD_TIERS.map(renderTier),
     ),
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-settings-section" },
-      React.createElement(PcSectionTitle, { icon: "check" }, "验收与上下文"),
-      React.createElement(
+      pcElement(PcSectionTitle, { icon: "check" }, "验收与上下文"),
+      pcElement(
         "div",
         { className: "pc-note" },
         "验收链路固定：一次性判定器 → need_info 时宿主复跑项目验证 → 仍缺证据时只读深审 → accept 前宿主再复跑一次项目验证。",
       ),
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-settings-grid" },
-        React.createElement(
+        pcElement(
           "div",
           { className: "pc-settings-cell" },
-          React.createElement("span", { className: "pc-field-label" }, "验收执行者"),
-          React.createElement(
+          pcElement("span", { className: "pc-field-label" }, "验收执行者"),
+          pcElement(
             PcSelect,
             {
               value: draft.reviewMode,
@@ -639,16 +639,16 @@ function PcSettingsDialog(props) {
               testId: "pc-settings-review-mode",
               onChange: (value) => setDraft((previous) => Object.assign({}, previous, { reviewMode: value })),
             },
-            React.createElement("option", { value: "reviewer" }, "一次性判定器（推荐）"),
-            React.createElement("option", { value: "lead" }, "lead 自动验收（旧行为）"),
-            React.createElement("option", { value: "off" }, "关闭自动验收（只人工）"),
+            pcElement("option", { value: "reviewer" }, "一次性判定器（推荐）"),
+            pcElement("option", { value: "lead" }, "lead 自动验收（旧行为）"),
+            pcElement("option", { value: "off" }, "关闭自动验收（只人工）"),
           ),
         ),
-        React.createElement(
+        pcElement(
           "div",
           { className: "pc-settings-cell" },
-          React.createElement("span", { className: "pc-field-label" }, "lead 上下文轮换阈值（tokens）"),
-          React.createElement(PcInput, {
+          pcElement("span", { className: "pc-field-label" }, "lead 上下文轮换阈值（tokens）"),
+          pcElement(PcInput, {
             type: "number",
             value: draft.leadCtxLimitTokens,
             disabled: saving,
@@ -657,7 +657,7 @@ function PcSettingsDialog(props) {
           }),
         ),
       ),
-      React.createElement(PcSettingsModelPicker, {
+      pcElement(PcSettingsModelPicker, {
         value: draft.reviewer,
         catalogView,
         catalogEmpty,
@@ -665,28 +665,28 @@ function PcSettingsDialog(props) {
         testId: "reviewer",
         onChange: (value) => setDraft((previous) => Object.assign({}, previous, { reviewer: value })),
       }),
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-settings-slot-row" },
-        React.createElement("span", { className: "pc-field-label" }, "最多内联图片数"),
-        React.createElement(PcInput, {
+        pcElement("span", { className: "pc-field-label" }, "最多内联图片数"),
+        pcElement(PcInput, {
           type: "number",
           value: draft.reviewImageMax,
           disabled: saving,
           testId: "pc-settings-review-image-max",
           onChange: (value) => setDraft((previous) => Object.assign({}, previous, { reviewImageMax: value })),
         }),
-        React.createElement("span", { className: "pc-hint" }, "1–8；只对视觉类任务生效"),
+        pcElement("span", { className: "pc-hint" }, "1–8；只对视觉类任务生效"),
       ),
     ),
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-settings-section" },
-      React.createElement(PcSectionTitle, { icon: "layers" }, "调度"),
-      React.createElement(
+      pcElement(PcSectionTitle, { icon: "layers" }, "调度"),
+      pcElement(
         "label",
         { className: "pc-check" },
-        React.createElement("input", {
+        pcElement("input", {
           type: "checkbox",
           checked: draft.autoDispatch,
           disabled: saving,
@@ -695,33 +695,33 @@ function PcSettingsDialog(props) {
         }),
         "自动派发（待办任务排到就派发；关掉后只能在任务上手动点「派发」）",
       ),
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-settings-slot-row" },
-        React.createElement("span", { className: "pc-field-label" }, "全局并发槽位"),
-        React.createElement(PcInput, {
+        pcElement("span", { className: "pc-field-label" }, "全局并发槽位"),
+        pcElement(PcInput, {
           type: "number",
           value: draft.globalSlotBudget,
           disabled: saving,
           testId: "pc-settings-global-slots",
           onChange: (value) => setDraft((previous) => Object.assign({}, previous, { globalSlotBudget: value })),
         }),
-        React.createElement(
+        pcElement(
           "span",
           { className: "pc-hint" },
           `当前占用 ${pcNum(stateValue.slots && stateValue.slots.used, 0)} / ${pcNum(settings.globalSlotBudget, 8)}`,
         ),
       ),
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-note" },
         "并发按槽位算：任务按工作量占槽（低 1、中 2、高 4、极大 6），全局和项目上限谁先满谁挡派发。改完对后续派发生效，不动运行中的任务。",
       ),
       projects.length > 0
-        ? React.createElement(
+        ? pcElement(
             "div",
             { className: "pc-settings-projects" },
-            React.createElement("div", { className: "pc-settings-project-head" }, "项目并发槽位"),
+            pcElement("div", { className: "pc-settings-project-head" }, "项目并发槽位"),
             projects.map(renderProjectSlot),
           )
         : null,
@@ -732,7 +732,7 @@ function PcSettingsDialog(props) {
 /** 宿主未就绪空状态。 */
 function PcHostDownEmpty(props) {
   const error = props.state.error;
-  return React.createElement(
+  return pcElement(
     PcEmpty,
     {
       icon: "alert",
@@ -741,18 +741,18 @@ function PcHostDownEmpty(props) {
       desc: "页面本身已加载，但读不到宿主状态接口 GET /project-console-api/state。host 半边可能还在实现、还没加载，或者 DSH 需要重启一次。UI 会在状态可用后自动出现看板，不用刷新页面。",
     },
     error
-      ? React.createElement(
+      ? pcElement(
           "div",
           { className: "pc-error-box", style: { textAlign: "left" } },
           `${error.message}${uiStatusHint(error)}`,
         )
       : null,
-    React.createElement(
+    pcElement(
       "div",
       { style: { marginTop: 12, display: "flex", gap: 8 } },
-      React.createElement(PcButton, { variant: "primary", size: "md", icon: "refresh", loading: props.refreshing, onClick: props.onRetry }, "重试"),
+      pcElement(PcButton, { variant: "primary", size: "md", icon: "refresh", loading: props.refreshing, onClick: props.onRetry }, "重试"),
     ),
-    React.createElement("div", { className: "pc-hint", style: { marginTop: 10 } }, "排查：curl 同源 /project-console-api/ping 应返回 {ok:true}；/state 由 host 侧提供。"),
+    pcElement("div", { className: "pc-hint", style: { marginTop: 10 } }, "排查：curl 同源 /project-console-api/ping 应返回 {ok:true}；/state 由 host 侧提供。"),
   );
 }
 
@@ -767,14 +767,14 @@ function uiStatusHint(error) {
 
 /** 无项目空状态。 */
 function PcNoProjectsEmpty(props) {
-  return React.createElement(
+  return pcElement(
     PcEmpty,
     {
       icon: "folder",
       title: "还没有项目，先添加一个",
       desc: "工程台会把需求派发到项目仓库的独立 worktree 里执行，跑完在测试分支上集成测试，人工确认后再推送到主干分支。",
     },
-    React.createElement(PcAddProjectForm, { toast: props.toast, onCreated: props.onCreated }),
+    pcElement(PcAddProjectForm, { toast: props.toast, onCreated: props.onCreated }),
   );
 }
 
@@ -939,37 +939,37 @@ function PcNewTaskDialog(props) {
   };
 
   const attachmentCount = attachments.length;
-  return React.createElement(
+  return pcElement(
     PcModal,
     {
       title: "新建需求",
       subtitle: "创建后进入「待办」列；确认规格后点「派发」，宿主会建 worktree + 会话并开始执行。截图会随任务简报一起交给执行会话。",
       width: 640,
       onClose: submitting ? undefined : props.onCancel,
-      footer: React.createElement(
+      footer: pcElement(
         React.Fragment,
         null,
-        React.createElement(PcButton, { variant: "ghost", size: "md", onClick: props.onCancel, disabled: submitting }, "取消"),
-        React.createElement(
+        pcElement(PcButton, { variant: "ghost", size: "md", onClick: props.onCancel, disabled: submitting }, "取消"),
+        pcElement(
           PcButton,
           { variant: "primary", size: "md", icon: "plus", loading: submitting, onClick: submit, testId: "pc-new-task-submit" },
           uploadStep || "创建任务",
         ),
       ),
     },
-    React.createElement(
+    pcElement(
       PcField,
       { label: "项目", required: true },
-      React.createElement(
+      pcElement(
         PcSelect,
         { value: form.projectId, onChange: (value) => set("projectId", value), disabled: submitting },
-        projects.map((project) => React.createElement("option", { key: project.id, value: project.id }, project.name)),
+        projects.map((project) => pcElement("option", { key: project.id, value: project.id }, project.name)),
       ),
     ),
-    React.createElement(
+    pcElement(
       PcField,
       { label: "任务标题", required: true },
-      React.createElement(PcInput, {
+      pcElement(PcInput, {
         value: form.title,
         onChange: (value) => set("title", value),
         placeholder: "一句话说清要做什么，例如：给页面加一个深色模式开关",
@@ -977,10 +977,10 @@ function PcNewTaskDialog(props) {
         testId: "pc-new-task-title",
       }),
     ),
-    React.createElement(
+    pcElement(
       PcField,
       { label: "需求原文 / 简报", required: true, hint: "可以粘贴 PRD、设计稿说明、验收要点；写给执行会话看" },
-      React.createElement(PcTextarea, {
+      pcElement(PcTextarea, {
         value: form.brief,
         onChange: (value) => set("brief", value),
         onPaste: handlePaste,
@@ -990,15 +990,15 @@ function PcNewTaskDialog(props) {
         testId: "pc-new-task-brief",
       }),
     ),
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-attach-field" },
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-attach-head" },
-        React.createElement("span", { className: "pc-field-label" }, "参考截图"),
-        React.createElement("span", { className: "pc-attach-count" }, `${attachmentCount} / ${PC_ATTACHMENT_MAX}`),
-        React.createElement(
+        pcElement("span", { className: "pc-field-label" }, "参考截图"),
+        pcElement("span", { className: "pc-attach-count" }, `${attachmentCount} / ${PC_ATTACHMENT_MAX}`),
+        pcElement(
           PcButton,
           {
             variant: "secondary",
@@ -1013,12 +1013,12 @@ function PcNewTaskDialog(props) {
           "选择图片",
         ),
       ),
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-attach-hint" },
         "也可以直接在「需求原文」输入框里 Ctrl+V 粘贴剪贴板截图。最多 6 张、单张不超过 8MB（PNG / JPEG / WebP / GIF）。",
       ),
-      React.createElement("input", {
+      pcElement("input", {
         ref: fileInputRef,
         type: "file",
         accept: "image/*",
@@ -1031,23 +1031,23 @@ function PcNewTaskDialog(props) {
         },
       }),
       attachmentCount > 0
-        ? React.createElement(
+        ? pcElement(
             "div",
             { className: "pc-attach-list" },
             attachments.map((item, index) =>
-              React.createElement(
+              pcElement(
                 "div",
                 { key: item.key, className: "pc-attach-item", "data-testid": `pc-attachment-${index}` },
                 item.previewUrl
-                  ? React.createElement("img", { className: "pc-attach-img", src: item.previewUrl, alt: item.name })
-                  : React.createElement(PcIcon, { name: "file", size: 18 }),
-                React.createElement(
+                  ? pcElement("img", { className: "pc-attach-img", src: item.previewUrl, alt: item.name })
+                  : pcElement(PcIcon, { name: "file", size: 18 }),
+                pcElement(
                   "div",
                   { className: "pc-attach-meta" },
-                  React.createElement("span", { className: "pc-attach-name", title: item.name }, item.name),
-                  React.createElement("span", { className: "pc-attach-size" }, pcFmtFileSize(item.size)),
+                  pcElement("span", { className: "pc-attach-name", title: item.name }, item.name),
+                  pcElement("span", { className: "pc-attach-size" }, pcFmtFileSize(item.size)),
                 ),
-                React.createElement(
+                pcElement(
                   "button",
                   {
                     type: "button",
@@ -1058,30 +1058,30 @@ function PcNewTaskDialog(props) {
                     disabled: submitting,
                     onClick: () => removeAttachment(item.key),
                   },
-                  React.createElement(PcIcon, { name: "close", size: 11 }),
+                  pcElement(PcIcon, { name: "close", size: 11 }),
                 ),
               ),
             ),
           )
         : null,
-      uploadStep ? React.createElement("div", { className: "pc-hint" }, uploadStep) : null,
+      uploadStep ? pcElement("div", { className: "pc-hint" }, uploadStep) : null,
     ),
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-form-grid pc-form-grid--2" },
-      React.createElement(
+      pcElement(
         PcField,
         { label: "类型" },
-        React.createElement(
+        pcElement(
           PcSelect,
           { value: form.type, onChange: (value) => set("type", value), disabled: submitting },
-          PC_TASK_TYPES.map(([value, label]) => React.createElement("option", { key: value, value }, label)),
+          PC_TASK_TYPES.map(([value, label]) => pcElement("option", { key: value, value }, label)),
         ),
       ),
-      React.createElement(
+      pcElement(
         PcField,
         { label: "优先级", hint: "数字越大越先派发" },
-        React.createElement(PcInput, {
+        pcElement(PcInput, {
           type: "number",
           value: form.priority,
           onChange: (value) => set("priority", value),
@@ -1089,10 +1089,10 @@ function PcNewTaskDialog(props) {
         }),
       ),
     ),
-    React.createElement(
+    pcElement(
       PcField,
       { label: "预计触及路径", hint: "逗号分隔；用于冲突域提示，可留空" },
-      React.createElement(PcInput, {
+      pcElement(PcInput, {
         value: form.touches,
         onChange: (value) => set("touches", value),
         placeholder: "src/oam/, examples/oam-air/",
@@ -1115,18 +1115,18 @@ function PcPromptModal(props) {
     }
     props.onConfirm(text.trim());
   };
-  return React.createElement(
+  return pcElement(
     PcModal,
     {
       title: isRework ? `打回任务 #${task.id}` : `放弃任务 #${task.id}`,
       subtitle: isRework ? "意见会 followup 回原任务会话，任务重新进入运行中。" : "放弃会清理 worktree 与任务分支，patch 会保留在任务记录里。",
       width: 540,
       onClose: props.busy ? undefined : props.onCancel,
-      footer: React.createElement(
+      footer: pcElement(
         React.Fragment,
         null,
-        React.createElement(PcButton, { variant: "ghost", size: "md", onClick: props.onCancel, disabled: props.busy }, "取消"),
-        React.createElement(
+        pcElement(PcButton, { variant: "ghost", size: "md", onClick: props.onCancel, disabled: props.busy }, "取消"),
+        pcElement(
           PcButton,
           {
             variant: isRework ? "danger" : "danger",
@@ -1141,11 +1141,11 @@ function PcPromptModal(props) {
         ),
       ),
     },
-    React.createElement("div", { className: "pc-question-text" }, task.title || `任务 #${task.id}`),
-    React.createElement(
+    pcElement("div", { className: "pc-question-text" }, task.title || `任务 #${task.id}`),
+    pcElement(
       PcField,
       { label: isRework ? "返工意见" : "放弃原因", required: true },
-      React.createElement(PcTextarea, {
+      pcElement(PcTextarea, {
         value: text,
         onChange: setText,
         rows: 5,
@@ -1665,24 +1665,24 @@ function ProjectConsolePage(props) {
 
   let content = null;
   if (state.phase === "loading") {
-    content = React.createElement(PcEmpty, {
+    content = pcElement(PcEmpty, {
       icon: "history",
       title: "正在连接工程台…",
       desc: "读取 GET /project-console-api/state。",
     });
   } else if (state.phase === "error") {
-    content = React.createElement(PcHostDownEmpty, {
+    content = pcElement(PcHostDownEmpty, {
       state,
       refreshing,
       onRetry: manualRefresh,
     });
   } else if (!hasProjects) {
-    content = React.createElement(PcNoProjectsEmpty, {
+    content = pcElement(PcNoProjectsEmpty, {
       toast,
       onCreated: load,
     });
   } else {
-    content = React.createElement(PcBoard, {
+    content = pcElement(PcBoard, {
       state: value,
       selectedProject,
       busy,
@@ -1697,10 +1697,10 @@ function ProjectConsolePage(props) {
     });
   }
 
-  return React.createElement(
+  return pcElement(
     "div",
     { className: "pc-root", "data-testid": "pc-root" },
-    React.createElement(PcTopBar, {
+    pcElement(PcTopBar, {
       state,
       conn,
       refreshing,
@@ -1717,10 +1717,10 @@ function ProjectConsolePage(props) {
       onRefresh: manualRefresh,
     }),
     ready && hasProjects
-      ? React.createElement(PcStatBar, { state: value, counters })
+      ? pcElement(PcStatBar, { state: value, counters })
       : null,
     ready && hasProjects
-      ? React.createElement(PcQuestionsZone, {
+      ? pcElement(PcQuestionsZone, {
           questions,
           tasks: value.tasks || [],
           projects,
@@ -1732,7 +1732,7 @@ function ProjectConsolePage(props) {
       : null,
     content,
     detailId !== null && ready
-      ? React.createElement(PcDetailDrawer, {
+      ? pcElement(PcDetailDrawer, {
           ctx,
           taskId: detailId,
           fallbackTask: fallbackDetailTask,
@@ -1753,7 +1753,7 @@ function ProjectConsolePage(props) {
         })
       : null,
     transcriptTarget && ready
-      ? React.createElement(PcSessionViewerDrawer, {
+      ? pcElement(PcSessionViewerDrawer, {
           state: value,
           taskId: transcriptTarget.taskId,
           now,
@@ -1761,7 +1761,7 @@ function ProjectConsolePage(props) {
         })
       : null,
     sessionsOpen && ready
-      ? React.createElement(PcSessionsDrawer, {
+      ? pcElement(PcSessionsDrawer, {
           state: value,
           now,
           highlightSessionId: sessionsHighlight,
@@ -1776,7 +1776,7 @@ function ProjectConsolePage(props) {
         })
       : null,
     leadChatOpen && ready
-      ? React.createElement(PcLeadChatDrawer, {
+      ? pcElement(PcLeadChatDrawer, {
           state: value,
           toast,
           onClose: () => setLeadChatOpen(false),
@@ -1784,7 +1784,7 @@ function ProjectConsolePage(props) {
         })
       : null,
     integrationOpen && ready
-      ? React.createElement(PcIntegrationDrawer, {
+      ? pcElement(PcIntegrationDrawer, {
           state: value,
           selectedProject,
           initialProjectId: integrationProject,
@@ -1796,7 +1796,7 @@ function ProjectConsolePage(props) {
       })
       : null,
     settingsOpen && ready
-      ? React.createElement(PcSettingsDialog, {
+      ? pcElement(PcSettingsDialog, {
           state,
           toast,
           onClose: () => setSettingsOpen(false),
@@ -1804,29 +1804,29 @@ function ProjectConsolePage(props) {
         })
       : null,
     cancelTarget
-      ? React.createElement(
+      ? pcElement(
           PcModal,
           {
             title: "取消任务",
             width: 500,
             onClose: canceling ? undefined : () => setCancelTarget(null),
-            footer: React.createElement(
+            footer: pcElement(
               React.Fragment,
               null,
-              React.createElement(PcButton, { variant: "ghost", size: "md", onClick: () => setCancelTarget(null), disabled: canceling }, "不取消"),
-              React.createElement(
+              pcElement(PcButton, { variant: "ghost", size: "md", onClick: () => setCancelTarget(null), disabled: canceling }, "不取消"),
+              pcElement(
                 PcButton,
                 { variant: "danger", size: "md", icon: "close", loading: canceling, onClick: confirmCancelTask, testId: "pc-btn-cancel-confirm" },
                 "确认取消",
               ),
             ),
           },
-          React.createElement(
+          pcElement(
             "div",
             { className: "pc-question-text" },
             `取消任务 #${cancelTarget.id}？会终止会话并把任务标记为已取消，可之后在已归档里点「继续」重做。`,
           ),
-          React.createElement(
+          pcElement(
             "div",
             { className: "pc-note" },
             `任务「${cancelTarget.title || "未命名"}」当前状态：${pcStatusMeta(cancelTarget.status).label}。取消后任务进入已归档（分类：操作员取消），需要时可以点「继续」重新排队。`,
@@ -1834,29 +1834,29 @@ function ProjectConsolePage(props) {
         )
       : null,
     deleteTarget
-      ? React.createElement(
+      ? pcElement(
           PcModal,
           {
             title: "彻底删除任务",
             width: 480,
             onClose: deleting ? undefined : () => setDeleteTarget(null),
-            footer: React.createElement(
+            footer: pcElement(
               React.Fragment,
               null,
-              React.createElement(PcButton, { variant: "ghost", size: "md", onClick: () => setDeleteTarget(null), disabled: deleting }, "取消"),
-              React.createElement(
+              pcElement(PcButton, { variant: "ghost", size: "md", onClick: () => setDeleteTarget(null), disabled: deleting }, "取消"),
+              pcElement(
                 PcButton,
                 { variant: "danger", size: "md", icon: "trash", loading: deleting, onClick: confirmDeleteTask, testId: "pc-btn-delete-confirm" },
                 "彻底删除",
               ),
             ),
           },
-          React.createElement(
+          pcElement(
             "div",
             { className: "pc-question-text" },
             `彻底删除任务 #${deleteTarget.id}？该操作不可恢复。`,
           ),
-          React.createElement(
+          pcElement(
             "div",
             { className: "pc-note" },
             `任务「${deleteTarget.title || "未命名"}」当前状态：${pcStatusMeta(deleteTarget.status).label}。删除会同时移除运行记录、澄清问题和任务会话；已合并到 base 的提交不受影响。`,
@@ -1864,7 +1864,7 @@ function ProjectConsolePage(props) {
         )
       : null,
     prompt
-      ? React.createElement(PcPromptModal, {
+      ? pcElement(PcPromptModal, {
           prompt,
           busy: Boolean(busy[`${prompt.kind}-${prompt.task.id}`]),
           toast,
@@ -1873,7 +1873,7 @@ function ProjectConsolePage(props) {
         })
       : null,
     newTaskOpen && ready
-      ? React.createElement(PcNewTaskDialog, {
+      ? pcElement(PcNewTaskDialog, {
           projects,
           defaultProjectId: selectedProject,
           toast,
@@ -1885,7 +1885,7 @@ function ProjectConsolePage(props) {
         })
       : null,
     projectsOpen && ready
-      ? React.createElement(PcProjectsDialog, {
+      ? pcElement(PcProjectsDialog, {
           projects,
           toast,
           onDelete: requestDeleteProject,
@@ -1895,21 +1895,21 @@ function ProjectConsolePage(props) {
         })
       : null,
     projectDeleteTarget
-      ? React.createElement(
+      ? pcElement(
           PcModal,
           {
             title: "删除项目",
             width: 560,
             onClose: deletingProject ? undefined : () => setProjectDeleteTarget(null),
-            footer: React.createElement(
+            footer: pcElement(
               React.Fragment,
               null,
-              React.createElement(
+              pcElement(
                 PcButton,
                 { variant: "ghost", size: "md", onClick: () => setProjectDeleteTarget(null), disabled: deletingProject },
                 "取消",
               ),
-              React.createElement(
+              pcElement(
                 PcButton,
                 {
                   variant: "danger",
@@ -1924,12 +1924,12 @@ function ProjectConsolePage(props) {
               ),
             ),
           },
-          React.createElement(
+          pcElement(
             "div",
             { className: "pc-question-text" },
             `彻底删除项目「${projectDeleteTarget.name || projectDeleteTarget.id}」？该操作不可恢复。`,
           ),
-          React.createElement(
+          pcElement(
             "div",
             { className: "pc-note" },
             `会连带删除名下 ${projectDeleteTasks.length} 个任务记录` +
@@ -1939,7 +1939,7 @@ function ProjectConsolePage(props) {
               `，以及它们的运行记录、待澄清问题和集成批次；worktree、任务分支、验收报告和证据归档会一并清理。仓库 ${projectDeleteTarget.repoPath || "目录"} 本身和已合并到主干分支的提交不受影响。`,
           ),
           projectDeleteBusy.length > 0
-            ? React.createElement(
+            ? pcElement(
                 "div",
                 { className: "pc-error-box" },
                 `项目还有 ${projectDeleteBusy.length} 个任务在执行（${projectDeleteBusy.map((task) => `#${task.id}`).join("、")}），先取消或等它们结束后再删。`,
@@ -1947,6 +1947,6 @@ function ProjectConsolePage(props) {
             : null,
         )
       : null,
-    React.createElement(PcToastStack, { toasts, onDismiss: dismissToast }),
+    pcElement(PcToastStack, { toasts, onDismiss: dismissToast }),
   );
 }

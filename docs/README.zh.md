@@ -2,7 +2,7 @@
 
 **DSH Web 的多需求工作台。** 写一条需求，工程台给它一个独立的 git worktree 和一个 agent 会话，自己改、自己跑测试、自己交证据；验收通过进集成，人工确认后才推进本地主干分支。
 
-![工程台演示：任务看板、任务详情与验收证据、等待推送的集成批次](https://raw.githubusercontent.com/revive123456/dsh-project-console/main/docs/assets/hero.gif)
+![工程台演示：任务看板、任务详情与验收证据、等待推送的集成批次](https://raw.githubusercontent.com/revive123456/dsh-project-console/main/docs/assets/zh/hero.gif)
 
 [![npm](https://img.shields.io/npm/v/dsh-project-console.svg)](https://www.npmjs.com/package/dsh-project-console)
 [![CI](https://github.com/revive123456/dsh-project-console/actions/workflows/ci.yml/badge.svg)](https://github.com/revive123456/dsh-project-console/actions/workflows/ci.yml)
@@ -28,15 +28,16 @@
 - **待澄清**：需求有歧义时，工程台把问题放到看板；回答后任务继续。
 - **会话集中**：任务会话收在工程台的「会话」面板里，不占左侧栏。
 - **验收报告**：已验收任务可生成单文件 HTML，截图内联，离线可看，也能打印成 PDF。
+- **中英界面**：跟随 DSH 的语言设置切换中文 / English。
 - **参考截图**：提需求时可以贴截图，任务会话能直接查看。
 
 ## 截图
 
 | 任务看板 | 任务详情与证据 |
 | --- | --- |
-| ![四列任务看板，顶部有一条待澄清问题](https://raw.githubusercontent.com/revive123456/dsh-project-console/main/docs/assets/screenshot-board.png) | ![任务详情：验收标准、diff 和自测证据](https://raw.githubusercontent.com/revive123456/dsh-project-console/main/docs/assets/screenshot-detail.png) |
+| ![四列任务看板，顶部有一条待澄清问题](https://raw.githubusercontent.com/revive123456/dsh-project-console/main/docs/assets/zh/screenshot-board.png) | ![任务详情：验收标准、diff 和自测证据](https://raw.githubusercontent.com/revive123456/dsh-project-console/main/docs/assets/zh/screenshot-detail.png) |
 
-![集成批次：测试分支、验证结果和推送按钮](https://raw.githubusercontent.com/revive123456/dsh-project-console/main/docs/assets/screenshot-integration.png)
+![集成批次：测试分支、验证结果和推送按钮](https://raw.githubusercontent.com/revive123456/dsh-project-console/main/docs/assets/zh/screenshot-integration.png)
 
 ## 安装
 

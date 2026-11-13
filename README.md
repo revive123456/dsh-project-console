@@ -2,7 +2,7 @@
 
 **A multi-task workbench for the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) web UI.** Write a requirement, and the console gives it an isolated git worktree and an agent session that edits, tests, and collects evidence on its own. Accepted tasks go into an integration batch; the local base branch is only advanced after you confirm it.
 
-![Project Console in action: the task board, a task detail with acceptance evidence, and an integration batch ready to push](https://raw.githubusercontent.com/revive123456/dsh-project-console/main/docs/assets/hero.gif)
+![Project Console in action: the task board, a task detail with acceptance evidence, and an integration batch ready to push](https://raw.githubusercontent.com/revive123456/dsh-project-console/main/docs/assets/en/hero.gif)
 
 [![npm](https://img.shields.io/npm/v/dsh-project-console.svg)](https://www.npmjs.com/package/dsh-project-console)
 [![CI](https://github.com/revive123456/dsh-project-console/actions/workflows/ci.yml/badge.svg)](https://github.com/revive123456/dsh-project-console/actions/workflows/ci.yml)
@@ -28,15 +28,16 @@ Each requirement becomes a task. The console creates a worktree outside the repo
 - **Clarification** — when a requirement is ambiguous, the console asks on the board. Answer it and the task continues.
 - **Task sessions in one place** — task sessions live in the console's Sessions panel instead of the sidebar.
 - **Acceptance reports** — accepted tasks can produce a single-file HTML report with inline screenshots. It opens offline and prints to PDF.
+- **Bilingual UI** — the console follows the DSH language setting (English / Chinese).
 - **Reference screenshots** — attach screenshots when creating a task; the task session can read them.
 
 ## Screenshots
 
 | Task board | Task detail and evidence |
 | --- | --- |
-| ![Four task columns with a clarification at the top](https://raw.githubusercontent.com/revive123456/dsh-project-console/main/docs/assets/screenshot-board.png) | ![Task detail with DoD, diff, and test evidence](https://raw.githubusercontent.com/revive123456/dsh-project-console/main/docs/assets/screenshot-detail.png) |
+| ![Four task columns with a clarification at the top](https://raw.githubusercontent.com/revive123456/dsh-project-console/main/docs/assets/en/screenshot-board.png) | ![Task detail with DoD, diff, and test evidence](https://raw.githubusercontent.com/revive123456/dsh-project-console/main/docs/assets/en/screenshot-detail.png) |
 
-![Integration batch with a test branch, verification result, and the push button](https://raw.githubusercontent.com/revive123456/dsh-project-console/main/docs/assets/screenshot-integration.png)
+![Integration batch with a test branch, verification result, and the push button](https://raw.githubusercontent.com/revive123456/dsh-project-console/main/docs/assets/en/screenshot-integration.png)
 
 ## Install
 

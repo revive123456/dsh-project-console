@@ -7,7 +7,7 @@
  * 所有注册都包 try/catch：宿主版本漂移时不至于把整个 client 半边带崩。
  */
 
-const PC_INJECT = ["slots"];
+const PC_INJECT = ["slots", "locale"];
 
 function pcLogError(where, error) {
   try {
@@ -25,13 +25,25 @@ function pcApply(ctx) {
   }
 
   try {
+    if (ctx.locale && typeof ctx.locale.register === "function") {
+      const applyLocale = () => ctx.locale.register(PC_I18N_NS, pcDictionaries());
+      if (typeof ctx.effect === "function") ctx.effect(applyLocale, "dsh-project-console: locale dictionaries");
+      else applyLocale();
+      pcSetLocale(ctx.locale);
+    }
+  } catch (error) {
+    pcLogError("register locale dictionaries", error);
+  }
+
+  try {
     ctx.slots.inject("sidebar.panellist", () =>
       ctx.slots.register(
         {
           name: "sidebar.panellist",
           id: PC_PANEL_ID,
           order: 20,
-          label: () => "工程台",
+          locale: PC_I18N_NS,
+          label: () => pcT("工程台"),
         },
         ProjectConsoleIcon,
       ),
@@ -46,6 +58,7 @@ function pcApply(ctx) {
         {
           name: "main",
           key: PC_PANEL_ID,
+          locale: PC_I18N_NS,
           inject: () => ({ ctx }),
         },
         ProjectConsolePage,

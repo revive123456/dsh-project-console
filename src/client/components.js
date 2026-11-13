@@ -1,5 +1,5 @@
 /**
- * 工程台 client：通用 UI 组件（纯 React.createElement，无 JSX）。
+ * 工程台 client：通用 UI 组件（纯 pcElement，无 JSX）。
  */
 
 /** 内联 SVG 图标注册表：name → [["path", {d}], ["circle", {...}], ...]。 */
@@ -140,7 +140,7 @@ const PC_ICON_PATHS = {
 /** 侧栏图标：props = { size, active }（宿主侧边栏传入）。 */
 function ProjectConsoleIcon(props) {
   const size = (props && props.size) || 18;
-  return React.createElement(
+  return pcElement(
     "svg",
     {
       width: size,
@@ -154,7 +154,7 @@ function ProjectConsoleIcon(props) {
       "aria-hidden": "true",
     },
     PC_ICON_PATHS.board.map((entry, index) =>
-      React.createElement(entry[0], Object.assign({ key: index }, entry[1])),
+      pcElement(entry[0], Object.assign({ key: index }, entry[1])),
     ),
   );
 }
@@ -163,7 +163,7 @@ function ProjectConsoleIcon(props) {
 function PcIcon(props) {
   const size = props.size || 14;
   const paths = PC_ICON_PATHS[props.name] || PC_ICON_PATHS.info;
-  return React.createElement(
+  return pcElement(
     "svg",
     {
       width: size,
@@ -177,14 +177,14 @@ function PcIcon(props) {
       "aria-hidden": "true",
       style: Object.assign({ flex: "none", display: "block" }, props.style),
     },
-    paths.map((entry, index) => React.createElement(entry[0], Object.assign({ key: index }, entry[1]))),
+    paths.map((entry, index) => pcElement(entry[0], Object.assign({ key: index }, entry[1]))),
   );
 }
 
 /** 菊花加载图标。 */
 function PcSpinner(props) {
   const size = props && props.size ? props.size : 13;
-  return React.createElement(
+  return pcElement(
     "svg",
     {
       width: size,
@@ -194,7 +194,7 @@ function PcSpinner(props) {
       "aria-hidden": "true",
       className: "pc-spinner",
     },
-    React.createElement("circle", {
+    pcElement("circle", {
       cx: 12,
       cy: 12,
       r: 9,
@@ -202,7 +202,7 @@ function PcSpinner(props) {
       strokeWidth: 3,
       opacity: 0.22,
     }),
-    React.createElement("path", {
+    pcElement("path", {
       d: "M21 12a9 9 0 0 0-9-9",
       stroke: "currentColor",
       strokeWidth: 3,
@@ -223,7 +223,7 @@ function PcButton(props) {
   const extra = {};
   if (props.testId) extra["data-testid"] = props.testId;
   if (props.title) extra.title = props.title;
-  return React.createElement(
+  return pcElement(
     "button",
     Object.assign(
       {
@@ -241,22 +241,22 @@ function PcButton(props) {
       },
       extra,
     ),
-    props.loading ? React.createElement(PcSpinner, { size: size === "sm" ? 11 : 13 }) : null,
-    props.icon && !props.loading ? React.createElement(PcIcon, { name: props.icon, size: size === "sm" ? 12 : 14 }) : null,
+    props.loading ? pcElement(PcSpinner, { size: size === "sm" ? 11 : 13 }) : null,
+    props.icon && !props.loading ? pcElement(PcIcon, { name: props.icon, size: size === "sm" ? 12 : 14 }) : null,
     props.children === undefined || props.children === null
       ? null
-      : React.createElement("span", { className: "pc-btn-label" }, props.children),
-    props.iconRight ? React.createElement(PcIcon, { name: props.iconRight, size: size === "sm" ? 12 : 14 }) : null,
+      : pcElement("span", { className: "pc-btn-label" }, props.children),
+    props.iconRight ? pcElement(PcIcon, { name: props.iconRight, size: size === "sm" ? 12 : 14 }) : null,
   );
 }
 
 /** 状态徽标。 */
 function PcBadge(props) {
   const tone = props.tone || "idle";
-  return React.createElement(
+  return pcElement(
     "span",
     { className: `pc-badge pc-badge--${tone}` },
-    props.icon ? React.createElement(PcIcon, { name: props.icon, size: 10 }) : null,
+    props.icon ? pcElement(PcIcon, { name: props.icon, size: 10 }) : null,
     props.children,
   );
 }
@@ -269,7 +269,7 @@ function PcChip(props) {
   if (props.onClick) classes.push("pc-chip--clickable");
   if (props.className) classes.push(props.className);
   const extra = props.testId ? { "data-testid": props.testId } : {};
-  return React.createElement(
+  return pcElement(
     props.onClick ? "button" : "span",
     Object.assign(
       {
@@ -297,7 +297,7 @@ function PcModal(props) {
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [props.onClose]);
-  return React.createElement(
+  return pcElement(
     "div",
     {
       className: "pc-modal-mask",
@@ -305,7 +305,7 @@ function PcModal(props) {
         if (event.target === event.currentTarget && props.onClose) props.onClose();
       },
     },
-    React.createElement(
+    pcElement(
       "div",
       {
         className: "pc-modal",
@@ -314,43 +314,43 @@ function PcModal(props) {
         "aria-modal": "true",
         "aria-label": props.title,
       },
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-modal-head" },
-        React.createElement(
+        pcElement(
           "div",
           { className: "pc-modal-head-text" },
-          React.createElement("div", { className: "pc-modal-title" }, props.title),
-          props.subtitle ? React.createElement("div", { className: "pc-modal-subtitle" }, props.subtitle) : null,
+          pcElement("div", { className: "pc-modal-title" }, props.title),
+          props.subtitle ? pcElement("div", { className: "pc-modal-subtitle" }, props.subtitle) : null,
         ),
         props.onClose
-          ? React.createElement(
+          ? pcElement(
               "button",
               { type: "button", className: "pc-icon-btn", onClick: props.onClose, title: "关闭", "aria-label": "关闭" },
-              React.createElement(PcIcon, { name: "close", size: 15 }),
+              pcElement(PcIcon, { name: "close", size: 15 }),
             )
           : null,
       ),
-      React.createElement("div", { className: "pc-modal-body" }, props.children),
-      props.footer ? React.createElement("div", { className: "pc-modal-foot" }, props.footer) : null,
+      pcElement("div", { className: "pc-modal-body" }, props.children),
+      props.footer ? pcElement("div", { className: "pc-modal-foot" }, props.footer) : null,
     ),
   );
 }
 
 /** 表单字段：label + 控件 + 提示。 */
 function PcField(props) {
-  return React.createElement(
+  return pcElement(
     "label",
     { className: "pc-field" },
-    React.createElement(
+    pcElement(
       "span",
       { className: "pc-field-label" },
       props.label,
-      props.required ? React.createElement("span", { className: "pc-field-required" }, "*") : null,
-      props.right ? React.createElement("span", { className: "pc-field-right" }, props.right) : null,
+      props.required ? pcElement("span", { className: "pc-field-required" }, "*") : null,
+      props.right ? pcElement("span", { className: "pc-field-right" }, props.right) : null,
     ),
     props.children,
-    props.hint ? React.createElement("span", { className: "pc-field-hint" }, props.hint) : null,
+    props.hint ? pcElement("span", { className: "pc-field-hint" }, props.hint) : null,
   );
 }
 
@@ -358,7 +358,7 @@ function PcInput(props) {
   const extra = {};
   if (props.testId) extra["data-testid"] = props.testId;
   if (props.placeholder) extra.placeholder = props.placeholder;
-  return React.createElement(
+  return pcElement(
     "input",
     Object.assign(
       {
@@ -380,7 +380,7 @@ function PcInput(props) {
 function PcTextarea(props) {
   const extra = {};
   if (props.testId) extra["data-testid"] = props.testId;
-  return React.createElement("textarea", {
+  return pcElement("textarea", {
     className: "pc-textarea",
     value: props.value,
     placeholder: props.placeholder,
@@ -398,7 +398,7 @@ function PcTextarea(props) {
 function PcSelect(props) {
   const extra = {};
   if (props.testId) extra["data-testid"] = props.testId;
-  return React.createElement(
+  return pcElement(
     "select",
     Object.assign(
       {
@@ -417,54 +417,54 @@ function PcSelect(props) {
 
 /** 空状态（图标 + 标题 + 说明 + 操作）。 */
 function PcEmpty(props) {
-  return React.createElement(
+  return pcElement(
     "div",
     { className: "pc-empty" },
-    React.createElement(
+    pcElement(
       "div",
       { className: `pc-empty-icon pc-empty-icon--${props.tone || "brand"}` },
-      React.createElement(PcIcon, { name: props.icon || "board", size: 26 }),
+      pcElement(PcIcon, { name: props.icon || "board", size: 26 }),
     ),
-    React.createElement("div", { className: "pc-empty-title" }, props.title),
-    props.desc ? React.createElement("div", { className: "pc-empty-desc" }, props.desc) : null,
-    props.children ? React.createElement("div", { className: "pc-empty-extra" }, props.children) : null,
+    pcElement("div", { className: "pc-empty-title" }, props.title),
+    props.desc ? pcElement("div", { className: "pc-empty-desc" }, props.desc) : null,
+    props.children ? pcElement("div", { className: "pc-empty-extra" }, props.children) : null,
   );
 }
 
 /** 小节标题。 */
 function PcSectionTitle(props) {
-  return React.createElement(
+  return pcElement(
     "div",
     { className: "pc-section-title" },
-    props.icon ? React.createElement(PcIcon, { name: props.icon, size: 12 }) : null,
-    React.createElement("span", null, props.children),
-    props.right ? React.createElement("span", { className: "pc-section-title-right" }, props.right) : null,
+    props.icon ? pcElement(PcIcon, { name: props.icon, size: 12 }) : null,
+    pcElement("span", null, props.children),
+    props.right ? pcElement("span", { className: "pc-section-title-right" }, props.right) : null,
   );
 }
 
 /** 键值对。 */
 function PcKV(props) {
-  return React.createElement(
+  return pcElement(
     "div",
     { className: "pc-kv" },
-    React.createElement("div", { className: "pc-kv-label" }, props.label),
-    React.createElement("div", { className: props.mono ? "pc-kv-value pc-kv-value--mono" : "pc-kv-value" }, props.children),
+    pcElement("div", { className: "pc-kv-label" }, props.label),
+    pcElement("div", { className: props.mono ? "pc-kv-value pc-kv-value--mono" : "pc-kv-value" }, props.children),
   );
 }
 
 /** 折叠块（原生 details，无状态）。 */
 function PcDetails(props) {
-  return React.createElement(
+  return pcElement(
     "details",
     { className: "pc-details" },
-    React.createElement("summary", { className: "pc-details-summary" }, props.summary),
-    React.createElement("div", { className: "pc-details-body" }, props.children),
+    pcElement("summary", { className: "pc-details-summary" }, props.summary),
+    pcElement("div", { className: "pc-details-body" }, props.children),
   );
 }
 
 /** 连接状态小圆点。 */
 function PcDot(props) {
-  return React.createElement("span", {
+  return pcElement("span", {
     className: `pc-dot pc-dot--${props.tone || "idle"}`,
     title: props.title,
   });
@@ -480,17 +480,17 @@ function PcReasonBlock(props) {
   const failed = task && task.status === "failed";
   const text = pcTaskReasonText(task);
   const classes = ["pc-reason", failed ? "pc-reason--failed" : "", `pc-reason--${category.key}`].filter(Boolean);
-  return React.createElement(
+  return pcElement(
     "div",
     { className: classes.join(" "), "data-testid": "pc-abandon-reason" },
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-reason-head" },
-      React.createElement(PcBadge, { tone: category.tone, icon: failed ? "alert" : "info" }, category.label),
-      React.createElement("span", { className: "pc-reason-label" }, failed ? "失败原因" : "放弃原因"),
-      React.createElement("span", { className: "pc-reason-spacer" }),
+      pcElement(PcBadge, { tone: category.tone, icon: failed ? "alert" : "info" }, category.label),
+      pcElement("span", { className: "pc-reason-label" }, failed ? "失败原因" : "放弃原因"),
+      pcElement("span", { className: "pc-reason-spacer" }),
       props.onResume
-        ? React.createElement(
+        ? pcElement(
             PcButton,
             {
               variant: "primary",
@@ -506,7 +506,7 @@ function PcReasonBlock(props) {
           )
         : null,
     ),
-    React.createElement(
+    pcElement(
       "div",
       { className: props.clamp ? "pc-reason-text pc-reason-text--clamp" : "pc-reason-text", title: props.clamp ? text : undefined },
       text,
@@ -523,7 +523,7 @@ function PcAttachmentTile(props) {
   const [broken, setBroken] = React.useState(false);
   const url = pcAttachmentUrl(attachment);
   const name = attachment.name || "参考截图";
-  return React.createElement(
+  return pcElement(
     "a",
     {
       className: "pc-att",
@@ -533,25 +533,25 @@ function PcAttachmentTile(props) {
       title: `${name}\n${attachment.path || ""}`,
     },
     broken
-      ? React.createElement(
+      ? pcElement(
           "div",
           { className: "pc-att-fallback" },
-          React.createElement(PcIcon, { name: "file", size: 18 }),
-          React.createElement("span", { className: "pc-att-fallback-name" }, name),
-          React.createElement("span", { className: "pc-att-fallback-path" }, attachment.path || ""),
+          pcElement(PcIcon, { name: "file", size: 18 }),
+          pcElement("span", { className: "pc-att-fallback-name" }, name),
+          pcElement("span", { className: "pc-att-fallback-path" }, attachment.path || ""),
         )
-      : React.createElement("img", {
+      : pcElement("img", {
           className: "pc-att-img",
           src: url,
           alt: name,
           loading: "lazy",
           onError: () => setBroken(true),
         }),
-    React.createElement(
+    pcElement(
       "span",
       { className: "pc-att-caption" },
-      React.createElement("span", { className: "pc-att-name" }, name),
-      attachment.size ? React.createElement("span", { className: "pc-att-size" }, pcFmtFileSize(attachment.size)) : null,
+      pcElement("span", { className: "pc-att-name" }, name),
+      attachment.size ? pcElement("span", { className: "pc-att-size" }, pcFmtFileSize(attachment.size)) : null,
     ),
   );
 }
@@ -559,11 +559,11 @@ function PcAttachmentTile(props) {
 /** Toast 堆栈（3 秒自动消失，由 app 侧计时）。 */
 function PcToastStack(props) {
   if (!props.toasts || props.toasts.length === 0) return null;
-  return React.createElement(
+  return pcElement(
     "div",
     { className: "pc-toasts", "aria-live": "polite" },
     props.toasts.map((toast) =>
-      React.createElement(
+      pcElement(
         "div",
         {
           key: toast.id,
@@ -571,12 +571,12 @@ function PcToastStack(props) {
           "data-testid": "pc-toast",
           role: "status",
         },
-        React.createElement(PcIcon, {
+        pcElement(PcIcon, {
           name: toast.kind === "error" ? "alert" : toast.kind === "info" ? "info" : "check",
           size: 14,
         }),
-        React.createElement("span", { className: "pc-toast-text" }, toast.text),
-        React.createElement(
+        pcElement("span", { className: "pc-toast-text" }, toast.text),
+        pcElement(
           "button",
           {
             type: "button",
@@ -584,7 +584,7 @@ function PcToastStack(props) {
             onClick: () => props.onDismiss(toast.id),
             "aria-label": "关闭提示",
           },
-          React.createElement(PcIcon, { name: "close", size: 12 }),
+          pcElement(PcIcon, { name: "close", size: 12 }),
         ),
       ),
     ),

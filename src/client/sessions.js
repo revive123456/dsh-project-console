@@ -14,17 +14,17 @@ function PcChatMessage(props) {
   const meta = pcChatRoleMeta(role);
   const text = message.text === null || message.text === undefined ? "" : String(message.text);
   const isTool = role === "tool";
-  return React.createElement(
+  return pcElement(
     "div",
     { className: `pc-chat-msg pc-chat-msg--${role}`, "data-testid": "pc-chat-msg" },
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-chat-msg-head" },
-      React.createElement("span", { className: `pc-chat-role pc-chat-role--${meta.tone}` }, meta.label),
-      message.time ? React.createElement("span", { className: "pc-chat-time" }, pcFmtClock(message.time)) : null,
-      message.type ? React.createElement("span", { className: "pc-chat-type", title: String(message.type) }, String(message.type)) : null,
+      pcElement("span", { className: `pc-chat-role pc-chat-role--${meta.tone}` }, meta.label),
+      message.time ? pcElement("span", { className: "pc-chat-time" }, pcFmtClock(message.time)) : null,
+      message.type ? pcElement("span", { className: "pc-chat-type", title: String(message.type) }, String(message.type)) : null,
     ),
-    React.createElement("div", { className: "pc-chat-text", title: isTool ? text : undefined }, text),
+    pcElement("div", { className: "pc-chat-text", title: isTool ? text : undefined }, text),
   );
 }
 
@@ -118,7 +118,7 @@ function PcLeadChatDrawer(props) {
   const bodyChildren = [];
   if (phase === "error" && error) {
     bodyChildren.push(
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-error-box", key: "error", style: { margin: "12px 16px" } },
         `读取对话失败：${error.message}（宿主 /lead/transcript 暂不可用时会持续重试）`,
@@ -126,31 +126,31 @@ function PcLeadChatDrawer(props) {
     );
   }
   bodyChildren.push(
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-chat-list", key: "list", ref: listRef },
       messages.length === 0
-        ? React.createElement(
+        ? pcElement(
             "div",
             { className: "pc-panel-empty pc-chat-empty" },
-            React.createElement("div", { className: "pc-empty-icon" }, React.createElement(PcIcon, { name: "chat", size: 20 })),
-            React.createElement("div", { className: "pc-empty-title", style: { fontSize: 13.5 } }, phase === "loading" ? "正在读取对话…" : "还没有对话记录"),
-            React.createElement(
+            pcElement("div", { className: "pc-empty-icon" }, pcElement(PcIcon, { name: "chat", size: 20 })),
+            pcElement("div", { className: "pc-empty-title", style: { fontSize: 13.5 } }, phase === "loading" ? "正在读取对话…" : "还没有对话记录"),
+            pcElement(
               "div",
               { className: "pc-empty-desc", style: { fontSize: 11.5 } },
               phase === "loading" ? "GET /lead/transcript" : "在下面输入框给工程台发第一条指令，比如「用一句话说明当前看板状态」。",
             ),
           )
         : messages.map((message, index) =>
-            React.createElement(PcChatMessage, { key: `${index}-${message.time || ""}`, message }),
+            pcElement(PcChatMessage, { key: `${index}-${message.time || ""}`, message }),
           ),
     ),
   );
   bodyChildren.push(
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-chat-composer", key: "composer" },
-      React.createElement(PcTextarea, {
+      pcElement(PcTextarea, {
         value: text,
         onChange: setText,
         onKeyDown: (event) => {
@@ -164,15 +164,15 @@ function PcLeadChatDrawer(props) {
         placeholder: "给工程台发消息…（Enter 发送，Shift+Enter 换行）\n例如：用一句话说明当前看板状态。",
         testId: "pc-chat-input",
       }),
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-chat-composer-row" },
-        React.createElement(
+        pcElement(
           "span",
           { className: "pc-hint" },
           `自动刷新 1.5s${syncedAt ? ` · 同步于 ${pcFmtClock(new Date(syncedAt).toISOString())}` : ""}`,
         ),
-        React.createElement(
+        pcElement(
           PcButton,
           { variant: "primary", size: "sm", icon: "send", loading: sending, disabled: text.trim() === "", onClick: send, testId: "pc-chat-send" },
           "发送",
@@ -181,7 +181,7 @@ function PcLeadChatDrawer(props) {
     ),
   );
 
-  return React.createElement(
+  return pcElement(
     "div",
     {
       className: "pc-drawer-mask",
@@ -189,38 +189,38 @@ function PcLeadChatDrawer(props) {
         if (event.target === event.currentTarget && !sending) props.onClose();
       },
     },
-    React.createElement(
+    pcElement(
       "aside",
       { className: "pc-drawer pc-drawer--chat", "data-testid": "pc-lead-chat", role: "dialog", "aria-label": "工程台对话", "aria-modal": "true" },
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-drawer-head" },
-        React.createElement(
+        pcElement(
           "div",
           { className: "pc-drawer-head-text" },
-          React.createElement(
+          pcElement(
             "div",
             { className: "pc-drawer-eyebrow" },
-            React.createElement(PcBadge, { tone: "busy", icon: "robot" }, "工程台 · super agent"),
-            React.createElement(PcDot, { tone: statusMeta.tone }),
-            React.createElement("span", { className: "pc-hint" }, statusMeta.label),
-            lead.hidden === true ? React.createElement(PcChip, {}, "隐藏会话") : null,
+            pcElement(PcBadge, { tone: "busy", icon: "robot" }, "工程台 · super agent"),
+            pcElement(PcDot, { tone: statusMeta.tone }),
+            pcElement("span", { className: "pc-hint" }, statusMeta.label),
+            lead.hidden === true ? pcElement(PcChip, {}, "隐藏会话") : null,
           ),
-          React.createElement("div", { className: "pc-drawer-title" }, "工程台对话"),
-          React.createElement(
+          pcElement("div", { className: "pc-drawer-title" }, "工程台对话"),
+          pcElement(
             "div",
             { className: "pc-drawer-sub" },
-            sessionId ? React.createElement("span", { className: "pc-mono" }, pcShortSession(sessionId)) : null,
-            React.createElement("span", null, "对话记录来自 /lead/transcript，发送会直接驱动 lead"),
+            sessionId ? pcElement("span", { className: "pc-mono" }, pcShortSession(sessionId)) : null,
+            pcElement("span", null, "对话记录来自 /lead/transcript，发送会直接驱动 lead"),
           ),
         ),
-        React.createElement(
+        pcElement(
           "button",
           { type: "button", className: "pc-icon-btn", onClick: props.onClose, title: "关闭对话", "aria-label": "关闭对话", disabled: sending },
-          React.createElement(PcIcon, { name: "close", size: 15 }),
+          pcElement(PcIcon, { name: "close", size: 15 }),
         ),
       ),
-      React.createElement("div", { className: "pc-drawer-body pc-chat-body" }, bodyChildren),
+      pcElement("div", { className: "pc-drawer-body pc-chat-body" }, bodyChildren),
     ),
   );
 }
@@ -252,47 +252,47 @@ function PcSessionRow(props) {
       setHiding(false);
     }
   };
-  return React.createElement(
+  return pcElement(
     "div",
     {
       className: `pc-session-row${props.highlight ? " is-highlight" : ""}`,
       "data-testid": `pc-session-${session.id}`,
     },
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-session-top" },
-      React.createElement(
+      pcElement(
         PcBadge,
         { tone: isLead ? "busy" : "idle", icon: isLead ? "robot" : "terminal" },
         isLead ? "工程台" : `任务 #${session.taskId !== null && session.taskId !== undefined ? session.taskId : "?"}`,
       ),
-      React.createElement("span", { className: "pc-session-title", title }, title),
-      React.createElement(
+      pcElement("span", { className: "pc-session-title", title }, title),
+      pcElement(
         "span",
         { className: "pc-session-state" },
-        React.createElement(PcDot, { tone: statusMeta.tone }),
+        pcElement(PcDot, { tone: statusMeta.tone }),
         statusMeta.label,
-        React.createElement("span", { className: "pc-session-time" }, pcSessionTimeText(session, props.now)),
+        pcElement("span", { className: "pc-session-time" }, pcSessionTimeText(session, props.now)),
       ),
     ),
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-session-meta" },
-      React.createElement("span", null, isLead ? "工程台" : project ? project.name : session.projectId || "—"),
-      React.createElement("span", { className: "pc-mono" }, pcShortSession(session.id)),
-      session.hidden ? React.createElement("span", { className: "pc-chip" }, "隐藏会话") : null,
+      pcElement("span", null, isLead ? "工程台" : project ? project.name : session.projectId || "—"),
+      pcElement("span", { className: "pc-mono" }, pcShortSession(session.id)),
+      session.hidden ? pcElement("span", { className: "pc-chip" }, "隐藏会话") : null,
     ),
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-session-event", title: eventText },
-      React.createElement(PcIcon, { name: "terminal", size: 11, style: { opacity: 0.7 } }),
-      React.createElement("span", { className: "pc-session-event-text" }, eventText),
+      pcElement(PcIcon, { name: "terminal", size: 11, style: { opacity: 0.7 } }),
+      pcElement("span", { className: "pc-session-event-text" }, eventText),
     ),
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-session-actions" },
       isLead
-        ? React.createElement(
+        ? pcElement(
             PcButton,
             {
               variant: "primary",
@@ -304,7 +304,7 @@ function PcSessionRow(props) {
             },
             "打开对话",
           )
-        : React.createElement(
+        : pcElement(
             PcButton,
             {
               variant: "secondary",
@@ -317,7 +317,7 @@ function PcSessionRow(props) {
           ),
       isLead
         ? null
-        : React.createElement(
+        : pcElement(
             PcButton,
             {
               variant: "ghost",
@@ -354,26 +354,26 @@ function PcSessionsDrawer(props) {
   const bodyChildren = [];
   if (sessions.length === 0) {
     bodyChildren.push(
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-panel-empty", key: "empty" },
-        React.createElement("div", { className: "pc-empty-icon pc-empty-icon--warn" }, React.createElement(PcIcon, { name: "chat", size: 22 })),
-        React.createElement("div", { className: "pc-empty-title", style: { fontSize: 14 } }, "宿主还没有提供会话列表"),
-        React.createElement(
+        pcElement("div", { className: "pc-empty-icon pc-empty-icon--warn" }, pcElement(PcIcon, { name: "chat", size: 22 })),
+        pcElement("div", { className: "pc-empty-title", style: { fontSize: 14 } }, "宿主还没有提供会话列表"),
+        pcElement(
           "div",
           { className: "pc-empty-desc", style: { fontSize: 12 } },
           "GET /state.sessions 为空或尚未提供。host 更新后这里会自动出现工程台会话与任务会话；任务会话是隐藏会话，左栏不再显示。",
         ),
-        React.createElement(PcButton, { variant: "secondary", size: "sm", icon: "refresh", onClick: props.onRefresh }, "刷新"),
+        pcElement(PcButton, { variant: "secondary", size: "sm", icon: "refresh", onClick: props.onRefresh }, "刷新"),
       ),
     );
   } else {
     bodyChildren.push(
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-session-list", key: "list" },
         sessions.map((session) =>
-          React.createElement(PcSessionRow, {
+          pcElement(PcSessionRow, {
             key: session.id,
             session,
             state,
@@ -388,7 +388,7 @@ function PcSessionsDrawer(props) {
     );
   }
 
-  return React.createElement(
+  return pcElement(
     "div",
     {
       className: "pc-drawer-mask",
@@ -396,39 +396,39 @@ function PcSessionsDrawer(props) {
         if (event.target === event.currentTarget) props.onClose();
       },
     },
-    React.createElement(
+    pcElement(
       "aside",
       { className: "pc-drawer", "data-testid": "pc-sessions", role: "dialog", "aria-label": "会话", "aria-modal": "true" },
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-drawer-head" },
-        React.createElement(
+        pcElement(
           "div",
           { className: "pc-drawer-head-text" },
-          React.createElement(
+          pcElement(
             "div",
             { className: "pc-drawer-eyebrow" },
-            React.createElement(PcBadge, { tone: "busy", icon: "chat" }, "会话"),
-            leadSession ? React.createElement(PcBadge, { tone: "idle", icon: "robot" }, "工程台会话已创建") : null,
+            pcElement(PcBadge, { tone: "busy", icon: "chat" }, "会话"),
+            leadSession ? pcElement(PcBadge, { tone: "idle", icon: "robot" }, "工程台会话已创建") : null,
           ),
-          React.createElement("div", { className: "pc-drawer-title" }, "工程台会话与任务会话"),
-          React.createElement(
+          pcElement("div", { className: "pc-drawer-title" }, "工程台会话与任务会话"),
+          pcElement(
             "div",
             { className: "pc-drawer-sub" },
-            React.createElement(
+            pcElement(
               "span",
               null,
               `${sessions.length} 个会话${runningCount > 0 ? ` · ${runningCount} 个运行中` : ""} · 会话都是隐藏会话，只能从这里访问`,
             ),
           ),
         ),
-        React.createElement(
+        pcElement(
           "button",
           { type: "button", className: "pc-icon-btn", onClick: props.onClose, title: "关闭", "aria-label": "关闭会话面板" },
-          React.createElement(PcIcon, { name: "close", size: 15 }),
+          pcElement(PcIcon, { name: "close", size: 15 }),
         ),
       ),
-      React.createElement("div", { className: "pc-drawer-body" }, bodyChildren),
+      pcElement("div", { className: "pc-drawer-body" }, bodyChildren),
     ),
   );
 }
@@ -440,17 +440,17 @@ function PcTranscriptMessage(props) {
   const meta = pcTranscriptRoleMeta(role);
   const text = message.text === null || message.text === undefined ? "" : String(message.text);
   const isTool = role === "tool";
-  return React.createElement(
+  return pcElement(
     "div",
     { className: `pc-chat-msg pc-chat-msg--${role}`, "data-testid": "pc-transcript-msg" },
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-chat-msg-head" },
-      React.createElement("span", { className: `pc-chat-role pc-chat-role--${meta.tone}` }, meta.label),
-      message.time ? React.createElement("span", { className: "pc-chat-time" }, pcFmtClock(message.time)) : null,
-      message.type ? React.createElement("span", { className: "pc-chat-type", title: String(message.type) }, String(message.type)) : null,
+      pcElement("span", { className: `pc-chat-role pc-chat-role--${meta.tone}` }, meta.label),
+      message.time ? pcElement("span", { className: "pc-chat-time" }, pcFmtClock(message.time)) : null,
+      message.type ? pcElement("span", { className: "pc-chat-type", title: String(message.type) }, String(message.type)) : null,
     ),
-    React.createElement("div", { className: "pc-chat-text", title: isTool ? text : undefined }, text),
+    pcElement("div", { className: "pc-chat-text", title: isTool ? text : undefined }, text),
   );
 }
 
@@ -535,11 +535,11 @@ function PcSessionViewerDrawer(props) {
   const bodyChildren = [];
   if (runs.length > 0) {
     bodyChildren.push(
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-run-tabs", key: "tabs" },
         runs.map((run) =>
-          React.createElement(
+          pcElement(
             "button",
             {
               key: run.runId,
@@ -557,7 +557,7 @@ function PcSessionViewerDrawer(props) {
   }
   if (payload.error) {
     bodyChildren.push(
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-error-box", key: "err" },
         `读取会话记录失败：${payload.error.message}（隐藏会话记录来自 /task/transcript）`,
@@ -565,32 +565,32 @@ function PcSessionViewerDrawer(props) {
     );
   }
   bodyChildren.push(
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-transcript-list", key: "list", ref: listRef },
       messages.length === 0
-        ? React.createElement(
+        ? pcElement(
             "div",
             { className: "pc-panel-empty pc-transcript-empty" },
-            React.createElement("div", { className: "pc-empty-icon" }, React.createElement(PcIcon, { name: "history", size: 20 })),
-            React.createElement(
+            pcElement("div", { className: "pc-empty-icon" }, pcElement(PcIcon, { name: "history", size: 20 })),
+            pcElement(
               "div",
               { className: "pc-empty-title", style: { fontSize: 13.5 } },
               payload.phase === "loading" ? "正在读取会话记录…" : "这次 run 还没有可读消息",
             ),
-            React.createElement(
+            pcElement(
               "div",
               { className: "pc-empty-desc", style: { fontSize: 11.5 } },
               payload.phase === "loading" ? "GET /task/transcript" : "会话是隐藏的（左栏不显示），记录仍在宿主里；换一个 run 或等任务跑起来再看。",
             ),
           )
         : messages.map((message, index) =>
-            React.createElement(PcTranscriptMessage, { key: `${activeRunId || "run"}-${index}`, message }),
+            pcElement(PcTranscriptMessage, { key: `${activeRunId || "run"}-${index}`, message }),
           ),
     ),
   );
 
-  return React.createElement(
+  return pcElement(
     "div",
     {
       className: "pc-drawer-mask",
@@ -598,41 +598,41 @@ function PcSessionViewerDrawer(props) {
         if (event.target === event.currentTarget) props.onClose();
       },
     },
-    React.createElement(
+    pcElement(
       "aside",
       { className: "pc-drawer pc-drawer--transcript", "data-testid": "pc-session-viewer", role: "dialog", "aria-label": "任务会话记录", "aria-modal": "true" },
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-drawer-head" },
-        React.createElement(
+        pcElement(
           "div",
           { className: "pc-drawer-head-text" },
-          React.createElement(
+          pcElement(
             "div",
             { className: "pc-drawer-eyebrow" },
-            React.createElement(PcBadge, { tone: "busy", icon: "history" }, "会话记录"),
-            React.createElement(PcDot, { tone: runMeta.dot }),
-            React.createElement("span", { className: "pc-hint" }, runMeta.label),
-            sessionId ? React.createElement("span", { className: "pc-mono pc-hint" }, pcShortSession(sessionId)) : null,
-            latestRunning ? React.createElement(PcChip, {}, "运行中 · 每 3s 刷新") : null,
+            pcElement(PcBadge, { tone: "busy", icon: "history" }, "会话记录"),
+            pcElement(PcDot, { tone: runMeta.dot }),
+            pcElement("span", { className: "pc-hint" }, runMeta.label),
+            sessionId ? pcElement("span", { className: "pc-mono pc-hint" }, pcShortSession(sessionId)) : null,
+            latestRunning ? pcElement(PcChip, {}, "运行中 · 每 3s 刷新") : null,
           ),
-          React.createElement("div", { className: "pc-drawer-title" }, `任务 #${taskId} · 会话记录`),
-          React.createElement(
+          pcElement("div", { className: "pc-drawer-title" }, `任务 #${taskId} · 会话记录`),
+          pcElement(
             "div",
             { className: "pc-drawer-sub" },
-            task ? React.createElement("span", null, task.title || "")
+            task ? pcElement("span", null, task.title || "")
             : null,
-            project ? React.createElement("span", null, `· ${project.name}`) : null,
-            React.createElement("span", null, `· ${runs.length} 个 run · ${messages.length} 条消息 · 只读`),
+            project ? pcElement("span", null, `· ${project.name}`) : null,
+            pcElement("span", null, `· ${runs.length} 个 run · ${messages.length} 条消息 · 只读`),
           ),
         ),
-        React.createElement(
+        pcElement(
           "button",
           { type: "button", className: "pc-icon-btn", onClick: props.onClose, title: "关闭", "aria-label": "关闭会话记录" },
-          React.createElement(PcIcon, { name: "close", size: 15 }),
+          pcElement(PcIcon, { name: "close", size: 15 }),
         ),
       ),
-      React.createElement("div", { className: "pc-drawer-body pc-transcript-body" }, bodyChildren),
+      pcElement("div", { className: "pc-drawer-body pc-transcript-body" }, bodyChildren),
     ),
   );
 }

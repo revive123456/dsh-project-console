@@ -10,29 +10,29 @@ function PcTeammatesBlock(props) {
     total: acc.total + Number(mate && mate.selfTest ? mate.selfTest.total : 0),
     passed: acc.passed + Number(mate && mate.selfTest ? mate.selfTest.passed : 0),
   }), { total: 0, passed: 0 });
-  return React.createElement(
+  return pcElement(
     "div",
     { className: "pc-stack", style: { marginTop: 8 } },
-    React.createElement(PcSectionTitle, null, "队友子会话", `${teammates.length} 个 · 队友自测 ${totals.passed}/${totals.total}`),
-    React.createElement(
+    pcElement(PcSectionTitle, null, "队友子会话", `${teammates.length} 个 · 队友自测 ${totals.passed}/${totals.total}`),
+    pcElement(
       "div",
       { className: "pc-hint" },
       "任务会话当 Team Lead 时用 spawn_teammate 开的 teammate；这些命令/输出来自子会话，不计入上面的 selfTest。",
     ),
     teammates.map((mate) =>
-      React.createElement(
+      pcElement(
         "div",
         { key: mate.sessionId || mate.name, className: "pc-run" },
-        React.createElement(
+        pcElement(
           "div",
           { className: "pc-run-head" },
-          React.createElement(PcBadge, { tone: "info", icon: "users" }, String(mate.name || "teammate")),
-          mate.description ? React.createElement("span", null, String(mate.description)) : null,
-          mate.sessionId ? React.createElement("span", { className: "pc-mono", style: { marginLeft: "auto" } }, String(mate.sessionId).slice(0, 18)) : null,
+          pcElement(PcBadge, { tone: "info", icon: "users" }, String(mate.name || "teammate")),
+          mate.description ? pcElement("span", null, String(mate.description)) : null,
+          mate.sessionId ? pcElement("span", { className: "pc-mono", style: { marginLeft: "auto" } }, String(mate.sessionId).slice(0, 18)) : null,
         ),
-        React.createElement(PcSelfTestTable, { selfTest: mate.selfTest }),
+        pcElement(PcSelfTestTable, { selfTest: mate.selfTest }),
         mate.finalText
-          ? React.createElement(PcDetails, { summary: "查看该队友的最终输出" }, React.createElement("pre", { className: "pc-tail" }, String(mate.finalText)))
+          ? pcElement(PcDetails, { summary: "查看该队友的最终输出" }, pcElement("pre", { className: "pc-tail" }, String(mate.finalText)))
           : null,
       ),
     ),
@@ -43,63 +43,63 @@ function PcTeammatesBlock(props) {
 function PcSelfTestTable(props) {
   const selfTest = props.selfTest;
   if (!selfTest || typeof selfTest !== "object") {
-    return React.createElement("div", { className: "pc-hint" }, "本次运行没有 selfTest 记录");
+    return pcElement("div", { className: "pc-hint" }, "本次运行没有 selfTest 记录");
   }
   const summaryRaw = pcSelfTestText(selfTest);
   const summary = summaryRaw && summaryRaw.total > 0 ? summaryRaw : null;
   const commands = Array.isArray(selfTest.commands) ? selfTest.commands : [];
   if (!summary && commands.length === 0) {
-    return React.createElement("div", { className: "pc-hint" }, "本次运行没有 selfTest 记录");
+    return pcElement("div", { className: "pc-hint" }, "本次运行没有 selfTest 记录");
   }
-  return React.createElement(
+  return pcElement(
     "div",
     { className: "pc-stack" },
     summary
-      ? React.createElement(
+      ? pcElement(
           "div",
           { className: "pc-row", style: { fontSize: 11.5 } },
-          React.createElement(
+          pcElement(
             PcBadge,
             { tone: summary.allPassed ? "success" : "danger" },
             `selfTest ${summary.passed}/${summary.total}`,
           ),
-          summary.failed > 0 ? React.createElement("span", { className: "pc-err-text" }, `${summary.failed} 条失败`) : null,
+          summary.failed > 0 ? pcElement("span", { className: "pc-err-text" }, `${summary.failed} 条失败`) : null,
         )
       : null,
     commands.length > 0
-      ? React.createElement(
+      ? pcElement(
           "table",
           { className: "pc-table" },
-          React.createElement(
+          pcElement(
             "thead",
             null,
-            React.createElement(
+            pcElement(
               "tr",
               null,
-              React.createElement("th", { style: { width: "46%" } }, "命令"),
-              React.createElement("th", { style: { width: 48 } }, "退出码"),
-              React.createElement("th", null, "输出尾部"),
+              pcElement("th", { style: { width: "46%" } }, "命令"),
+              pcElement("th", { style: { width: 48 } }, "退出码"),
+              pcElement("th", null, "输出尾部"),
             ),
           ),
-          React.createElement(
+          pcElement(
             "tbody",
             null,
             commands.map((command, index) =>
-              React.createElement(
+              pcElement(
                 "tr",
                 { key: `${command.command || "cmd"}-${index}` },
-                React.createElement("td", { className: "pc-table-command" }, command.command || "—"),
-                React.createElement(
+                pcElement("td", { className: "pc-table-command" }, command.command || "—"),
+                pcElement(
                   "td",
                   null,
-                  React.createElement(PcBadge, { tone: command.ok === false || command.exitCode !== 0 ? "danger" : "success", icon: "terminal" }, String(command.exitCode ?? "?")),
+                  pcElement(PcBadge, { tone: command.ok === false || command.exitCode !== 0 ? "danger" : "success", icon: "terminal" }, String(command.exitCode ?? "?")),
                 ),
-                React.createElement(
+                pcElement(
                   "td",
                   null,
                   command.tail
-                    ? React.createElement(PcDetails, { summary: "展开输出尾部" }, React.createElement("pre", { className: "pc-tail" }, String(command.tail)))
-                    : React.createElement("span", { className: "pc-hint" }, "—"),
+                    ? pcElement(PcDetails, { summary: "展开输出尾部" }, pcElement("pre", { className: "pc-tail" }, String(command.tail)))
+                    : pcElement("span", { className: "pc-hint" }, "—"),
                 ),
               ),
             ),
@@ -175,21 +175,21 @@ function pcChangeRow(file, index) {
   const noLines = hasStats && (file.additions ?? 0) === 0 && (file.deletions ?? 0) === 0;
   const stat =
     !hasStats || noLines
-      ? React.createElement(
+      ? pcElement(
           "span",
           { key: "blank", className: "pc-change-stat pc-change-blank", title: noLines ? "二进制或仅元数据变化，没有行数统计" : "没有行数统计" },
           hasStats ? "二进制" : "—",
         )
-      : React.createElement(
+      : pcElement(
           "span",
           { key: "stat", className: "pc-change-stat" },
-          React.createElement("span", { className: "pc-diff-add" }, `+${file.additions ?? 0}`),
-          React.createElement("span", { className: "pc-diff-del" }, `-${file.deletions ?? 0}`),
+          pcElement("span", { className: "pc-diff-add" }, `+${file.additions ?? 0}`),
+          pcElement("span", { className: "pc-diff-del" }, `-${file.deletions ?? 0}`),
         );
-  return React.createElement(
+  return pcElement(
     "div",
     { className: "pc-change-row", key: `${file.key}-${index}`, title: file.path, "data-testid": "pc-change-row" },
-    React.createElement("span", { className: "pc-change-path" }, file.path),
+    pcElement("span", { className: "pc-change-path" }, file.path),
     stat,
   );
 }
@@ -270,25 +270,25 @@ function PcChangedFiles(props) {
     metaParts.push(view.running ? "运行中" : pcFmtDateTime(view.run.endedAt || view.run.startedAt));
   }
   const children = [
-    React.createElement(PcSectionTitle, { key: "title" }, "本次改动", rightParts.length > 0 ? rightParts.join(" · ") : null),
+    pcElement(PcSectionTitle, { key: "title" }, "本次改动", rightParts.length > 0 ? rightParts.join(" · ") : null),
   ];
   if (metaParts.length > 0) {
-    children.push(React.createElement("div", { key: "meta", className: "pc-change-meta" }, metaParts.join(" · ")));
+    children.push(pcElement("div", { key: "meta", className: "pc-change-meta" }, metaParts.join(" · ")));
   }
   if (files.length > 0) {
-    children.push(React.createElement("div", { key: "list", className: "pc-change-list" }, files.slice(0, 8).map(pcChangeRow)));
+    children.push(pcElement("div", { key: "list", className: "pc-change-list" }, files.slice(0, 8).map(pcChangeRow)));
     if (files.length > 8) {
       children.push(
-        React.createElement(
+        pcElement(
           PcDetails,
           { key: "more", summary: `展开其余 ${files.length - 8} 个文件` },
-          React.createElement("div", { className: "pc-change-list" }, files.slice(8).map((file, index) => pcChangeRow(file, index + 8))),
+          pcElement("div", { className: "pc-change-list" }, files.slice(8).map((file, index) => pcChangeRow(file, index + 8))),
         ),
       );
     }
   } else if (view.source === "acceptance") {
     children.push(
-      React.createElement(
+      pcElement(
         "div",
         { key: "empty", className: "pc-hint" },
         view.hiddenCount > 0 ? "改动都在工程台内部文件里（.project-console/…）" : view.skipped ? "验收时工作树没有改动（空提交）" : "验收提交里没有任务改动的文件",
@@ -296,7 +296,7 @@ function PcChangedFiles(props) {
     );
   } else if (view.source === "run") {
     children.push(
-      React.createElement(
+      pcElement(
         "div",
         { key: "empty", className: "pc-hint" },
         view.hiddenCount > 0 && view.rawCount - view.hiddenCount <= 0
@@ -309,12 +309,12 @@ function PcChangedFiles(props) {
       ),
     );
   } else {
-    children.push(React.createElement("div", { key: "empty", className: "pc-hint" }, "任务运行结束后，这里会列出改动的文件"));
+    children.push(pcElement("div", { key: "empty", className: "pc-hint" }, "任务运行结束后，这里会列出改动的文件"));
   }
   if (view.hiddenCount > 0 && files.length > 0) {
-    children.push(React.createElement("div", { key: "hidden", className: "pc-change-hint" }, `已隐藏 ${view.hiddenCount} 个工程台内部文件（.project-console/…）`));
+    children.push(pcElement("div", { key: "hidden", className: "pc-change-hint" }, `已隐藏 ${view.hiddenCount} 个工程台内部文件（.project-console/…）`));
   }
-  return React.createElement("div", { className: "pc-section", "data-testid": "pc-changed-files" }, children);
+  return pcElement("div", { className: "pc-section", "data-testid": "pc-changed-files" }, children);
 }
 
 /** run 状态：taskView.lastRun 有 status；state.runs 原始记录只有 outcome。 */
@@ -333,55 +333,55 @@ function PcRunBlock(props) {
   const statusTone = runState === "running" ? "busy" : runState === "failed" ? "danger" : "success";
   const fileSplit = pcSplitChangeFiles(pcRunFiles(run, props.task));
   const hostVerify = run.hostVerify && Array.isArray(run.hostVerify.commands) ? run.hostVerify : null;
-  return React.createElement(
+  return pcElement(
     "div",
     { className: "pc-run" },
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-run-head" },
-      React.createElement("span", { className: "pc-run-id" }, `run ${run.id ?? "?"}`),
-      React.createElement(PcBadge, { tone: statusTone }, runState === "running" ? "运行中" : runState === "failed" ? "失败" : "已结束"),
-      React.createElement("span", null, `开始 ${pcFmtDateTime(run.startedAt)}`),
-      React.createElement("span", null, `· 耗时 ${pcRunDuration(run, props.now)}`),
-      run.diffStat ? React.createElement("span", { className: "pc-mono", style: { marginLeft: "auto" } }, run.diffStat) : null,
-      pcNum(run.filesChanged, null) !== null ? React.createElement("span", null, `${run.filesChanged} 文件`) : null,
+      pcElement("span", { className: "pc-run-id" }, `run ${run.id ?? "?"}`),
+      pcElement(PcBadge, { tone: statusTone }, runState === "running" ? "运行中" : runState === "failed" ? "失败" : "已结束"),
+      pcElement("span", null, `开始 ${pcFmtDateTime(run.startedAt)}`),
+      pcElement("span", null, `· 耗时 ${pcRunDuration(run, props.now)}`),
+      run.diffStat ? pcElement("span", { className: "pc-mono", style: { marginLeft: "auto" } }, run.diffStat) : null,
+      pcNum(run.filesChanged, null) !== null ? pcElement("span", null, `${run.filesChanged} 文件`) : null,
     ),
     run.drift && run.drift.mainRepoChanged
-      ? React.createElement(
+      ? pcElement(
           "div",
           { className: "pc-card-warn" },
-          React.createElement(PcIcon, { name: "alert", size: 11 }),
-          React.createElement("span", null, "任务执行期间主仓有变更（drift）"),
+          pcElement(PcIcon, { name: "alert", size: 11 }),
+          pcElement("span", null, "任务执行期间主仓有变更（drift）"),
         )
       : null,
-    React.createElement(PcSelfTestTable, { selfTest: run.selfTest }),
-    React.createElement(PcTeammatesBlock, { teammates: run.teammates }),
+    pcElement(PcSelfTestTable, { selfTest: run.selfTest }),
+    pcElement(PcTeammatesBlock, { teammates: run.teammates }),
     hostVerify
-      ? React.createElement(
+      ? pcElement(
           "div",
           { className: "pc-stack" },
-          React.createElement(PcSectionTitle, null, "宿主复跑", pcFmtDateTime(hostVerify.at)),
-          React.createElement(PcIntegrationCommands, { commands: hostVerify.commands }),
+          pcElement(PcSectionTitle, null, "宿主复跑", pcFmtDateTime(hostVerify.at)),
+          pcElement(PcIntegrationCommands, { commands: hostVerify.commands }),
         )
       : null,
     run.finalText
-      ? React.createElement(PcDetails, { summary: "查看会话最终输出" }, React.createElement("pre", { className: "pc-tail" }, String(run.finalText)))
+      ? pcElement(PcDetails, { summary: "查看会话最终输出" }, pcElement("pre", { className: "pc-tail" }, String(run.finalText)))
       : null,
     fileSplit.files.length > 0
-      ? React.createElement(
+      ? pcElement(
           "div",
           { className: "pc-stack" },
-          React.createElement(PcSectionTitle, null, "本次运行改动"),
-          React.createElement("div", { className: "pc-change-list" }, fileSplit.files.slice(0, 30).map(pcChangeRow)),
-          fileSplit.files.length > 30 ? React.createElement("div", { className: "pc-hint" }, `… 另有 ${fileSplit.files.length - 30} 个文件`) : null,
+          pcElement(PcSectionTitle, null, "本次运行改动"),
+          pcElement("div", { className: "pc-change-list" }, fileSplit.files.slice(0, 30).map(pcChangeRow)),
+          fileSplit.files.length > 30 ? pcElement("div", { className: "pc-hint" }, `… 另有 ${fileSplit.files.length - 30} 个文件`) : null,
           fileSplit.hiddenCount > 0
-            ? React.createElement("div", { className: "pc-change-hint" }, `已隐藏 ${fileSplit.hiddenCount} 个工程台内部文件（.project-console/…）`)
+            ? pcElement("div", { className: "pc-change-hint" }, `已隐藏 ${fileSplit.hiddenCount} 个工程台内部文件（.project-console/…）`)
             : null,
         )
       : fileSplit.hiddenCount > 0
-        ? React.createElement("div", { className: "pc-hint" }, "本次只有工程台内部文件改动")
+        ? pcElement("div", { className: "pc-hint" }, "本次只有工程台内部文件改动")
         : pcNum(run.filesChanged, 0) > 0
-          ? React.createElement(
+          ? pcElement(
               "div",
               { className: "pc-hint" },
               `宿主未提供文件清单（本次 ${run.filesChanged} 个文件${run.diffStat ? `，${run.diffStat}` : ""}）`,
@@ -393,8 +393,8 @@ function PcRunBlock(props) {
 /** 会话事件列表。 */
 function PcEventList(props) {
   const events = Array.isArray(props.events) ? props.events : [];
-  if (events.length === 0) return React.createElement("div", { className: "pc-hint" }, "暂无会话事件");
-  return React.createElement(
+  if (events.length === 0) return pcElement("div", { className: "pc-hint" }, "暂无会话事件");
+  return pcElement(
     "div",
     { className: "pc-event-list" },
     events
@@ -402,12 +402,12 @@ function PcEventList(props) {
       .reverse()
       .slice(0, 40)
       .map((event, index) =>
-        React.createElement(
+        pcElement(
           "div",
           { className: "pc-event", key: `${event.seq ?? index}-${event.type || ""}`, title: event.brief || event.summary || "" },
-          React.createElement("span", { className: "pc-event-time" }, pcFmtClock(event.time)),
-          React.createElement("span", { className: "pc-event-type" }, event.type || "event"),
-          React.createElement("span", { className: "pc-event-brief" }, event.brief || event.summary || ""),
+          pcElement("span", { className: "pc-event-time" }, pcFmtClock(event.time)),
+          pcElement("span", { className: "pc-event-type" }, event.type || "event"),
+          pcElement("span", { className: "pc-event-brief" }, event.brief || event.summary || ""),
         ),
       ),
   );
@@ -425,7 +425,7 @@ function PcDetailActions(props) {
   // 验收报告只对验收完成（accepted / merged）的任务开放：报告对应已验收的提交。
   if (task.status === "accepted" || task.status === "merged") {
     push(
-      React.createElement(
+      pcElement(
         PcButton,
         {
           key: "report",
@@ -443,7 +443,7 @@ function PcDetailActions(props) {
   }
   if (task.status === "abandoned" || task.status === "failed") {
     push(
-      React.createElement(
+      pcElement(
         PcButton,
         {
           key: "resume",
@@ -461,20 +461,20 @@ function PcDetailActions(props) {
   }
   if (column === "todo") {
     push(
-      React.createElement(
+      pcElement(
         PcButton,
         { key: "dispatch", variant: "primary", size: "sm", icon: "play", loading: isBusy("dispatch"), onClick: () => props.onTaskAction("dispatch", task), testId: "pc-task-dispatch" },
         "派发",
       ),
     );
     push(
-      React.createElement(PcButton, { key: "prio-up", variant: "ghost", size: "sm", icon: "arrowUp", loading: isBusy("priority-up"), onClick: () => props.onTaskAction("priority-up", task) }, "提优先级"),
+      pcElement(PcButton, { key: "prio-up", variant: "ghost", size: "sm", icon: "arrowUp", loading: isBusy("priority-up"), onClick: () => props.onTaskAction("priority-up", task) }, "提优先级"),
     );
     push(
-      React.createElement(PcButton, { key: "prio-down", variant: "ghost", size: "sm", icon: "arrowDown", loading: isBusy("priority-down"), onClick: () => props.onTaskAction("priority-down", task) }, "降优先级"),
+      pcElement(PcButton, { key: "prio-down", variant: "ghost", size: "sm", icon: "arrowDown", loading: isBusy("priority-down"), onClick: () => props.onTaskAction("priority-down", task) }, "降优先级"),
     );
     push(
-      React.createElement(
+      pcElement(
         PcButton,
         {
           key: "estimate",
@@ -490,17 +490,17 @@ function PcDetailActions(props) {
       ),
     );
     push(
-      React.createElement(PcButton, { key: "abandon", variant: "danger", size: "sm", icon: "trash", loading: isBusy("abandon"), onClick: () => props.onTaskAction("abandon", task), testId: "pc-task-abandon" }, "放弃"),
+      pcElement(PcButton, { key: "abandon", variant: "danger", size: "sm", icon: "trash", loading: isBusy("abandon"), onClick: () => props.onTaskAction("abandon", task), testId: "pc-task-abandon" }, "放弃"),
     );
   } else if (column === "review") {
     push(
-      React.createElement(PcButton, { key: "accept", variant: "success", size: "sm", icon: "check", loading: isBusy("accept"), onClick: () => props.onTaskAction("accept", task), testId: "pc-task-accept" }, "验收通过"),
+      pcElement(PcButton, { key: "accept", variant: "success", size: "sm", icon: "check", loading: isBusy("accept"), onClick: () => props.onTaskAction("accept", task), testId: "pc-task-accept" }, "验收通过"),
     );
     push(
-      React.createElement(PcButton, { key: "rework", variant: "danger", size: "sm", icon: "undo", onClick: () => props.onTaskAction("rework", task), testId: "pc-task-rework" }, "打回返工"),
+      pcElement(PcButton, { key: "rework", variant: "danger", size: "sm", icon: "undo", onClick: () => props.onTaskAction("rework", task), testId: "pc-task-rework" }, "打回返工"),
     );
     push(
-      React.createElement(
+      pcElement(
         PcButton,
         {
           key: "request-review",
@@ -516,7 +516,7 @@ function PcDetailActions(props) {
       ),
     );
     push(
-      React.createElement(
+      pcElement(
         PcButton,
         {
           key: "transcript",
@@ -532,11 +532,11 @@ function PcDetailActions(props) {
       ),
     );
     push(
-      React.createElement(PcButton, { key: "verify", variant: "secondary", size: "sm", icon: "terminal", loading: isBusy("verify"), onClick: () => props.onTaskAction("verify", task) }, "宿主复跑"),
+      pcElement(PcButton, { key: "verify", variant: "secondary", size: "sm", icon: "terminal", loading: isBusy("verify"), onClick: () => props.onTaskAction("verify", task) }, "宿主复跑"),
     );
   } else if (column === "running") {
     push(
-      React.createElement(
+      pcElement(
         PcButton,
         {
           key: "transcript",
@@ -554,7 +554,7 @@ function PcDetailActions(props) {
   } else {
     if (task.status !== "abandoned") {
       push(
-        React.createElement(
+        pcElement(
           PcButton,
           { key: "batch", variant: "secondary", size: "sm", icon: "layers", onClick: () => props.onOpenIntegration(task.projectId) },
           "查看集成批次",
@@ -562,7 +562,7 @@ function PcDetailActions(props) {
       );
     }
     push(
-      React.createElement(
+      pcElement(
         PcButton,
         {
           key: "transcript",
@@ -580,7 +580,7 @@ function PcDetailActions(props) {
   }
   if (column === "running" || column === "review") {
     items.push(
-      React.createElement(
+      pcElement(
         PcButton,
         {
           key: "cancel-task",
@@ -595,7 +595,7 @@ function PcDetailActions(props) {
       ),
     );
   }
-  return React.createElement("div", { className: "pc-drawer-actions" }, items);
+  return pcElement("div", { className: "pc-drawer-actions" }, items);
 }
 
 /** 任务详情抽屉。 */
@@ -661,24 +661,24 @@ function PcDetailDrawer(props) {
   const lastRun = task ? pcTaskLastRun(task, runs) : null;
   const taskQuestions = task && Array.isArray(task.questions) ? task.questions : [];
 
-  const head = React.createElement(
+  const head = pcElement(
     "div",
     { className: "pc-drawer-head" },
-    React.createElement(
+    pcElement(
       "div",
       { className: "pc-drawer-head-text" },
-      React.createElement(
+      pcElement(
         "div",
         { className: "pc-drawer-eyebrow" },
-        React.createElement("span", { className: "pc-card-id" }, `#${taskId}`),
+        pcElement("span", { className: "pc-card-id" }, `#${taskId}`),
         task && task.status === "verifying"
-          ? React.createElement(PcChip, { className: "pc-chip-verifying" }, "验收中")
+          ? pcElement(PcChip, { className: "pc-chip-verifying" }, "验收中")
           : statusMeta
-            ? React.createElement(PcBadge, { tone: statusMeta.tone }, statusMeta.label)
+            ? pcElement(PcBadge, { tone: statusMeta.tone }, statusMeta.label)
             : null,
-        task && pcNum(task.priority, null) !== null ? React.createElement(PcChip, { mono: true }, `P${task.priority}`) : null,
+        task && pcNum(task.priority, null) !== null ? pcElement(PcChip, { mono: true }, `P${task.priority}`) : null,
         task && task.size
-          ? React.createElement(
+          ? pcElement(
               PcChip,
               {
                 mono: true,
@@ -689,16 +689,16 @@ function PcDetailDrawer(props) {
             )
           : null,
       ),
-      React.createElement("div", { className: "pc-drawer-title" }, (task && task.title) || "任务详情"),
-      React.createElement(
+      pcElement("div", { className: "pc-drawer-title" }, (task && task.title) || "任务详情"),
+      pcElement(
         "div",
         { className: "pc-drawer-sub" },
-        React.createElement("span", null, project ? project.name : task ? task.projectId : "—"),
-        task && task.branch ? React.createElement("span", { className: "pc-mono" }, `· ${task.branch}`) : null,
+        pcElement("span", null, project ? project.name : task ? task.projectId : "—"),
+        task && task.branch ? pcElement("span", { className: "pc-mono" }, `· ${task.branch}`) : null,
       ),
     ),
     task && !["provisioning", "running", "verifying"].includes(task.status)
-      ? React.createElement(
+      ? pcElement(
           "button",
           {
             type: "button",
@@ -708,13 +708,13 @@ function PcDetailDrawer(props) {
             "aria-label": "彻底删除任务",
             "data-testid": "pc-btn-delete",
           },
-          React.createElement(PcIcon, { name: "trash", size: 15 }),
+          pcElement(PcIcon, { name: "trash", size: 15 }),
         )
       : null,
-    React.createElement(
+    pcElement(
       "button",
       { type: "button", className: "pc-icon-btn", onClick: props.onClose, title: "关闭详情（Esc）", "aria-label": "关闭详情" },
-      React.createElement(PcIcon, { name: "close", size: 15 }),
+      pcElement(PcIcon, { name: "close", size: 15 }),
     ),
   );
 
@@ -730,7 +730,7 @@ function PcDetailDrawer(props) {
 
   const bodyChildren = [];
   bodyChildren.push(
-    React.createElement("div", { key: "actions" }, task ? React.createElement(PcDetailActions, {
+    pcElement("div", { key: "actions" }, task ? pcElement(PcDetailActions, {
       task,
       busy: props.busy,
       onTaskAction: props.onTaskAction,
@@ -742,7 +742,7 @@ function PcDetailDrawer(props) {
   );
   if (detail.error) {
     bodyChildren.push(
-      React.createElement(
+      pcElement(
         "div",
         { key: "err", className: "pc-error-box" },
         `详情接口读取失败：${detail.error.message}${task ? "（下方为看板快照，可能稍旧）" : ""}`,
@@ -751,22 +751,22 @@ function PcDetailDrawer(props) {
   }
   if (task && (task.status === "abandoned" || task.status === "failed")) {
     bodyChildren.push(
-      React.createElement(
+      pcElement(
         "div",
         { key: "reason", className: "pc-section" },
-        React.createElement(
+        pcElement(
           PcSectionTitle,
           null,
           task.status === "failed" ? "失败原因" : "放弃原因",
           pcTaskReasonText(task).length > 0 ? `${pcTaskReasonText(task).length} 字` : null,
         ),
-        React.createElement(PcReasonBlock, { task, clamp: false }),
+        pcElement(PcReasonBlock, { task, clamp: false }),
       ),
     );
   }
   if (!task) {
     bodyChildren.push(
-      React.createElement(PcEmpty, {
+      pcElement(PcEmpty, {
         key: "empty",
         icon: detail.phase === "loading" ? "history" : "alert",
         tone: "warn",
@@ -797,15 +797,15 @@ function PcDetailDrawer(props) {
       ["运行次数", pcNum(task.runCount, null) === null ? "—" : String(task.runCount)],
     ];
     bodyChildren.push(
-      React.createElement(
+      pcElement(
         "div",
         { key: "meta", className: "pc-section" },
-        React.createElement(PcSectionTitle, null, "基本信息"),
-        React.createElement(
+        pcElement(PcSectionTitle, null, "基本信息"),
+        pcElement(
           "div",
           { className: "pc-kv-grid" },
           metaRows.map(([label, value]) =>
-            React.createElement(
+            pcElement(
               PcKV,
               { key: label, label, mono: label === "会话" || label === "分支" || label === "worktree" },
               String(value),
@@ -813,59 +813,59 @@ function PcDetailDrawer(props) {
           ),
         ),
         Array.isArray(task.dependsOn) && task.dependsOn.length > 0
-          ? React.createElement(
+          ? pcElement(
               "div",
               { className: "pc-row", style: { flexWrap: "wrap", fontSize: 11, marginTop: 2 } },
-              React.createElement("span", { className: "pc-dim" }, "依赖："),
-              task.dependsOn.map((dep) => React.createElement(PcChip, { key: dep, mono: true }, `#${dep}`)),
+              pcElement("span", { className: "pc-dim" }, "依赖："),
+              task.dependsOn.map((dep) => pcElement(PcChip, { key: dep, mono: true }, `#${dep}`)),
             )
           : null,
         Array.isArray(task.touches) && task.touches.length > 0
-          ? React.createElement(
+          ? pcElement(
               "div",
               { className: "pc-row", style: { flexWrap: "wrap", fontSize: 11 } },
-              React.createElement("span", { className: "pc-dim" }, "触及路径："),
-              task.touches.map((touch) => React.createElement(PcChip, { key: touch, mono: true }, touch)),
+              pcElement("span", { className: "pc-dim" }, "触及路径："),
+              task.touches.map((touch) => pcElement(PcChip, { key: touch, mono: true }, touch)),
             )
           : null,
         Array.isArray(task.tags) && task.tags.length > 0
-          ? React.createElement(
+          ? pcElement(
               "div",
               { className: "pc-row", style: { flexWrap: "wrap", fontSize: 11 } },
-              React.createElement("span", { className: "pc-dim" }, "标签："),
-              task.tags.map((tag) => React.createElement(PcChip, { key: tag }, tag)),
+              pcElement("span", { className: "pc-dim" }, "标签："),
+              task.tags.map((tag) => pcElement(PcChip, { key: tag }, tag)),
             )
           : null,
       ),
     );
     bodyChildren.push(
-      React.createElement("div", { key: "changes" }, React.createElement(PcChangedFiles, { view: pcTaskChanges(task, lastRun) })),
+      pcElement("div", { key: "changes" }, pcElement(PcChangedFiles, { view: pcTaskChanges(task, lastRun) })),
     );
     bodyChildren.push(
-      React.createElement(
+      pcElement(
         "div",
         { key: "brief", className: "pc-section" },
-        React.createElement(PcSectionTitle, null, "需求原文 / 简报"),
-        React.createElement("pre", { className: "pc-pre pc-pre--brief" }, task.brief || "（没有简报）"),
+        pcElement(PcSectionTitle, null, "需求原文 / 简报"),
+        pcElement("pre", { className: "pc-pre pc-pre--brief" }, task.brief || "（没有简报）"),
       ),
     );
     const taskAttachments = pcTaskAttachments(task);
     if (taskAttachments.length > 0) {
       bodyChildren.push(
-        React.createElement(
+        pcElement(
           "div",
           { key: "attachments", className: "pc-section" },
-          React.createElement(
+          pcElement(
             PcSectionTitle,
             null,
             "参考截图",
             `${taskAttachments.length} 张 · 点击新窗口看原图`,
           ),
-          React.createElement(
+          pcElement(
             "div",
             { className: "pc-att-grid", "data-testid": "pc-attachments" },
             taskAttachments.map((attachment, index) =>
-              React.createElement(PcAttachmentTile, {
+              pcElement(PcAttachmentTile, {
                 key: `${attachment.path || "att"}-${index}`,
                 attachment,
               }),
@@ -875,63 +875,63 @@ function PcDetailDrawer(props) {
       );
     }
     bodyChildren.push(
-      React.createElement(
+      pcElement(
         "div",
         { key: "dod", className: "pc-section" },
-        React.createElement(PcSectionTitle, null, "验收标准 DoD", Array.isArray(task.dod) ? `${task.dod.length} 条` : null),
+        pcElement(PcSectionTitle, null, "验收标准 DoD", Array.isArray(task.dod) ? `${task.dod.length} 条` : null),
         Array.isArray(task.dod) && task.dod.length > 0
-          ? React.createElement(
+          ? pcElement(
               "ul",
               { className: "pc-list" },
-              task.dod.map((item, index) => React.createElement("li", { key: index }, typeof item === "string" ? item : JSON.stringify(item))),
+              task.dod.map((item, index) => pcElement("li", { key: index }, typeof item === "string" ? item : JSON.stringify(item))),
             )
-          : React.createElement("div", { className: "pc-hint" }, "还没有 DoD 条目"),
+          : pcElement("div", { className: "pc-hint" }, "还没有 DoD 条目"),
       ),
     );
     bodyChildren.push(
-      React.createElement(
+      pcElement(
         "div",
         { key: "runs", className: "pc-section" },
-        React.createElement(PcSectionTitle, null, "运行记录", taskRuns.length > 0 ? `${taskRuns.length} 次` : null),
+        pcElement(PcSectionTitle, null, "运行记录", taskRuns.length > 0 ? `${taskRuns.length} 次` : null),
         taskRuns.length === 0
-          ? React.createElement("div", { className: "pc-hint" }, "还没有运行记录")
-          : taskRuns.map((run) => React.createElement(PcRunBlock, { key: run.id, run, task, now: props.now })),
+          ? pcElement("div", { className: "pc-hint" }, "还没有运行记录")
+          : taskRuns.map((run) => pcElement(PcRunBlock, { key: run.id, run, task, now: props.now })),
       ),
     );
     if (taskQuestions.length > 0) {
       bodyChildren.push(
-        React.createElement(
+        pcElement(
           "div",
           { key: "questions", className: "pc-section" },
-          React.createElement(PcSectionTitle, null, "澄清问题", `${taskQuestions.length} 条`),
+          pcElement(PcSectionTitle, null, "澄清问题", `${taskQuestions.length} 条`),
           taskQuestions.map((question) =>
-            React.createElement(
+            pcElement(
               "div",
               { key: question.id, className: "pc-run" },
-              React.createElement(
+              pcElement(
                 "div",
                 { className: "pc-run-head" },
-                React.createElement(PcBadge, { tone: question.status === "open" ? "warn" : question.status === "answered" ? "success" : "muted" }, question.status === "open" ? "待回答" : question.status === "answered" ? "已回答" : "已忽略"),
-                React.createElement("span", null, pcFmtDateTime(question.askedAt)),
+                pcElement(PcBadge, { tone: question.status === "open" ? "warn" : question.status === "answered" ? "success" : "muted" }, question.status === "open" ? "待回答" : question.status === "answered" ? "已回答" : "已忽略"),
+                pcElement("span", null, pcFmtDateTime(question.askedAt)),
               ),
-              React.createElement("div", { style: { fontSize: 12, lineHeight: 1.55 } }, question.text || ""),
-              question.answer ? React.createElement("div", { className: "pc-hint" }, `回答：${question.answer}`) : null,
+              pcElement("div", { style: { fontSize: 12, lineHeight: 1.55 } }, question.text || ""),
+              question.answer ? pcElement("div", { className: "pc-hint" }, `回答：${question.answer}`) : null,
             ),
           ),
         ),
       );
     }
     bodyChildren.push(
-      React.createElement(
+      pcElement(
         "div",
         { key: "events", className: "pc-section pc-events-section", ref: eventsRef },
-        React.createElement(PcSectionTitle, null, "最近会话事件", detail.events.length > 0 ? `${detail.events.length} 条` : null),
-        React.createElement(PcEventList, { events: detail.events }),
+        pcElement(PcSectionTitle, null, "最近会话事件", detail.events.length > 0 ? `${detail.events.length} 条` : null),
+        pcElement(PcEventList, { events: detail.events }),
       ),
     );
   }
 
-  return React.createElement(
+  return pcElement(
     "div",
     {
       className: "pc-drawer-mask",
@@ -939,11 +939,11 @@ function PcDetailDrawer(props) {
         if (event.target === event.currentTarget) props.onClose();
       },
     },
-    React.createElement(
+    pcElement(
       "aside",
       { className: "pc-drawer", "data-testid": "pc-detail", role: "dialog", "aria-label": "任务详情", "aria-modal": "true" },
       head,
-      React.createElement("div", { className: "pc-drawer-body" }, bodyChildren),
+      pcElement("div", { className: "pc-drawer-body" }, bodyChildren),
     ),
   );
 }
